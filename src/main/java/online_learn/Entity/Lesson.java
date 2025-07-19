@@ -39,15 +39,12 @@ public class Lesson implements Serializable {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
-    @NonNull
     private List<Pdf> pdfs = new ArrayList<>();
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
-    @NonNull
     private List<Video> videos = new ArrayList<>();
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
-    @NonNull
     private List<Quiz> quizzes = new ArrayList<>();
 
 }

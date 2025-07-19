@@ -71,10 +71,8 @@ public class Course implements Serializable {
     private boolean isDeleted;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    @NonNull
     private List<EnrollCourse> enrollCourses = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    @NonNull
     private List<Lesson> lessons = new ArrayList<>();
 }
