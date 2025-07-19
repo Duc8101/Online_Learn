@@ -3,8 +3,8 @@ package online_learn.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.NonNull;
 import online_learn.CompositeKey.EnrollCourseId;
-import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -28,12 +28,12 @@ public class EnrollCourse implements Serializable {
     private EnrollCourseId enrollCourseId;
 
     @ManyToOne
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "course_id", nullable = false)
     @NonNull
     private Course course;
 
     @ManyToOne
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id", nullable = false)
     @NonNull
     private User student;
 

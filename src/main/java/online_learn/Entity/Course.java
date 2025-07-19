@@ -3,7 +3,7 @@ package online_learn.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.lang.NonNull;
+import lombok.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
@@ -67,7 +67,7 @@ public class Course implements Serializable {
     @NonNull
     private LocalDateTime updatedAt;
 
-    @Column(name = "is_deleted")
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
