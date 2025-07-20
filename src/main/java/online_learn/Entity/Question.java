@@ -60,5 +60,5 @@ public class Question {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<StartQuiz> startQuizzes =  new ArrayList<>();
+    private List<StartQuiz> startQuizzes = new ArrayList<>();
 }

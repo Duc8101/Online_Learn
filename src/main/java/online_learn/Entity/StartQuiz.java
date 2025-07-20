@@ -15,7 +15,7 @@ public class StartQuiz {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "start_quiz_id",  nullable = false)
+    @Column(name = "start_quiz_id", nullable = false)
     private int startQuizId;
 
     @ManyToOne

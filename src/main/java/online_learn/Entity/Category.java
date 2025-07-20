@@ -33,5 +33,5 @@ public class Category implements Serializable {
     private String categoryName;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Course> courses = new ArrayList<>() ;
+    private List<Course> courses = new ArrayList<>();
 }

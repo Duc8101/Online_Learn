@@ -18,34 +18,34 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id",  nullable = false)
+    @Column(name = "user_id", nullable = false)
     private int userId;
 
-    @Column(name = "full_name",  nullable = false)
+    @Column(name = "full_name", nullable = false)
     @NonNull
     private String fullName;
 
-    @Column(name = "phone",  nullable = false)
+    @Column(name = "phone", nullable = false)
     @NonNull
     private String phone;
 
-    @Column(name = "image",  nullable = false)
+    @Column(name = "image", nullable = false)
     @NonNull
     private String image;
 
-    @Column(name = "address",  nullable = false)
+    @Column(name = "address", nullable = false)
     @NonNull
     private String address;
 
-    @Column(name = "email",  nullable = false)
+    @Column(name = "email", nullable = false)
     @NonNull
     private String email;
 
-    @Column(name = "gender",  nullable = false)
+    @Column(name = "gender", nullable = false)
     @NonNull
     private Genders gender;
 
-    @Column(name = "username",  nullable = false)
+    @Column(name = "username", nullable = false)
     @NonNull
     private String username;
 
@@ -60,7 +60,7 @@ public class User {
     @Column(name = "failed_login_attempts", nullable = false)
     private int failedLoginAttempts;
 
-    @Column(name ="lockout_end_time", nullable = false)
+    @Column(name = "lockout_end_time", nullable = false)
     @NonNull
     private LocalDateTime lockoutEndTime;
 

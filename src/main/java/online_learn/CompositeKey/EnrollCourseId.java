@@ -9,10 +9,10 @@ import java.util.Objects;
 @Embeddable
 public class EnrollCourseId implements Serializable {
 
-    @Column(name = "course_id",  nullable = false)
+    @Column(name = "course_id", nullable = false)
     private int courseId;
 
-    @Column(name = "student_id",  nullable = false)
+    @Column(name = "student_id", nullable = false)
     private int studentId;
 
     public EnrollCourseId() {

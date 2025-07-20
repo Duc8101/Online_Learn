@@ -17,7 +17,7 @@ public class Result {
     private int resultId;
 
     @ManyToOne
-    @JoinColumn(name = "quiz_id",  nullable = false)
+    @JoinColumn(name = "quiz_id", nullable = false)
     @NonNull
     private Quiz quiz;
 
