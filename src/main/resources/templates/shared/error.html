@@ -1,0 +1,34 @@
+<section th:replace="shared/header" xmlns:th="http://www.thymeleaf.org"></section>
+
+<!-- Header Start -->
+<div class="container-fluid bg-primary py-5 mb-5 page-header">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10 text-center">
+        <h1 class="display-3 text-white animated slideInDown">Error</h1>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-center">
+            <li class="breadcrumb-item"><a class="text-white" href="/Home">Home</a></li>
+            <li class="breadcrumb-item text-white active" aria-current="page"><span th:text="${code}"></span></li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Header End -->
+
+<!-- Code Start -->
+<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+  <div class="container text-center">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <p class="mb-4" th:text="${exception}"></p>
+        <a class="btn btn-primary rounded-pill py-3 px-5" href="/Home">Go Back To Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Code End -->
+
+<section th:replace="shared/footer" xmlns:th="http://www.thymeleaf.org"></section>

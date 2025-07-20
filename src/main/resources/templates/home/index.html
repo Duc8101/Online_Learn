@@ -1,0 +1,133 @@
+<section th:replace="shared/header" xmlns:th="http://www.thymeleaf.org"></section>
+
+<!-- About Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                <div class="position-relative h-100">
+                    <img class="img-fluid position-absolute w-100 h-100" src="/img/about.jpg" alt=""
+                         style="object-fit: cover;">
+                </div>
+            </div>
+            <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                <h6 class="section-title bg-white text-start text-primary pe-3">About Us</h6>
+                <h1 class="mb-4">Welcome to ELearning</h1>
+                <p class="mb-4">
+                    Changing learning for the better<br>
+                    Whether you want to learn or to share what you know, you are come to the right place. As a global
+                    destination for online learning, we connect people through knowledge.
+                </p>
+                <p class="mb-4">At E-Learning, we are all learners and instructors. We live out our values every day to
+                    create a culture that is diverse, inclusive, and committed to helping employees thrive.</p>
+                <div class="row gy-2 gx-4 mb-4">
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Skilled Instructors</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Online Classes</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>International Certificate</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Skilled Instructors</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Online Classes</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>International Certificate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About End -->
+
+<!-- Team Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Instructors</h6>
+            <h1 class="mb-5">Expert Instructors</h1>
+        </div>
+
+        <div class="row g-4">
+            <div th:each="user, iterStatus: ${users}" class="col-lg-3 col-md-6 wow fadeInUp"
+                 th:data-wow-delay="${0.1 + iterStatus.index * 0.2} + ${'s'}">
+                <div class="team-item bg-light">
+                    <div class="overflow-hidden">
+                        <img class="img-fluid" th:src="${user.getImage()}" alt="">
+                    </div>
+                    <div class="text-center p-4">
+                        <h5 class="mb-0" th:text="${user.getFullName()}">Name</h5>
+                        <small>Teacher</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Testimonial Start -->
+<div class="container-xxl py-5 wow fadeInDown" data-wow-delay="0.1s">
+    <div class="container">
+        <div class="text-center">
+            <h6 class="section-title bg-white text-center text-primary px-3">Testimonial</h6>
+            <h1 class="mb-5">Our Students Say!</h1>
+        </div>
+        <div class="owl-carousel testimonial-carousel position-relative">
+            <div class="testimonial-item text-center">
+                <img class="border rounded-circle p-2 mx-auto mb-3" src="/img/testimonial-1.jpg"
+                     style="width: 80px; height: 80px;">
+                <h5 class="mb-0">Ibrahim Runchman</h5>
+                <p>Students</p>
+                <div class="testimonial-text bg-light text-center p-4">
+                    <p class="mb-0">This course was short but very informative and very helpful for an aspiring leader
+                        like myself. It also helped me understand how to view or understand when I receive feedback. I
+                        highly recommend it!!</p>
+                </div>
+            </div>
+            <div class="testimonial-item text-center">
+                <img class="border rounded-circle p-2 mx-auto mb-3" src="/img/testimonial-2.jpg"
+                     style="width: 80px; height: 80px;">
+                <h5 class="mb-0">Yolande Ancliffe</h5>
+                <p>Students</p>
+                <div class="testimonial-text bg-light text-center p-4">
+                    <p class="mb-0">I enjoyed the course and learned a lot from it. The content is well organised and
+                        focused on practical situations. I particularly enjoyed the bits of psychological research
+                        shared in the content.</p>
+                </div>
+            </div>
+            <div class="testimonial-item text-center">
+                <img class="border rounded-circle p-2 mx-auto mb-3" src="/img/testimonial-3.jpg"
+                     style="width: 80px; height: 80px;">
+                <h5 class="mb-0">Salome Eddis</h5>
+                <p>Students</p>
+                <div class="testimonial-text bg-light text-center p-4">
+                    <p class="mb-0">This is the BEST online course I've taken on Coursera - or any other online platform
+                        for that matter. I appreciate the care taken to script each lesson and I also like the animation
+                        that kept me engaged. There's nothing worse than listening to an instructor who's not even
+                        prepared and is "just sitting there" in front of a camera.</p>
+                </div>
+            </div>
+            <div class="testimonial-item text-center">
+                <img class="border rounded-circle p-2 mx-auto mb-3" src="/img/testimonial-4.jpg"
+                     style="width: 80px; height: 80px;">
+                <h5 class="mb-0">Brok Doy</h5>
+                <p>Students</p>
+                <div class="testimonial-text bg-light text-center p-4">
+                    <p class="mb-0">This course is great for me for two reasons: Its has a powerful 'why' for effective
+                        feedback process and a very convincing and practical 'how' of giving feedback - It has left me
+                        with practical execises to practise the skill and sharpen my acumen.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Testimonial End -->
+
+<section th:replace="shared/footer" xmlns:th="http://www.thymeleaf.org"></section>

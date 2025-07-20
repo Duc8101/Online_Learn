@@ -28,12 +28,14 @@ public class EnrollCourse implements Serializable {
     private EnrollCourseId enrollCourseId;
 
     @ManyToOne
+    @MapsId("courseId")
     @JoinColumn(name = "course_id", nullable = false)
     @NonNull
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
+    @MapsId("studentId")
     @NonNull
     private User student;
 
