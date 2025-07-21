@@ -5,7 +5,7 @@ import online_learn.enums.Roles;
 import online_learn.repositories.IUserRepository;
 import online_learn.responses.ResponseBase;
 import online_learn.services.base.BaseService;
-import online_learn.view_models.Users.UserViewForHomePage;
+import online_learn.view_models.users.UserViewModelForHomePage;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -25,9 +25,9 @@ public class HomeService extends BaseService implements IHomeService {
     public ResponseBase index() {
         Map<String, Object> data = new HashMap<>();
         try {
-            List<UserViewForHomePage> users = userRepository.findAll().stream()
+            List<UserViewModelForHomePage> users = userRepository.findAll().stream()
                     .filter(u -> u.getRole().getRoleId() == Roles.TEACHER.getValue())
-                    .limit(4).map(u -> new UserViewForHomePage(u.getUserId(), u.getFullName(), u.getImage()))
+                    .limit(4).map(u -> new UserViewModelForHomePage(u.getUserId(), u.getFullName(), u.getImage()))
                     .toList();
 
             data.put("users", users);

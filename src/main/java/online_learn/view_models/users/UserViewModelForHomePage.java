@@ -1,20 +1,20 @@
-package online_learn.view_models.Users;
+package online_learn.view_models.users;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class UserViewForHomePage {
+public class UserViewModelForHomePage {
 
     private int userId;
     private String fullName;
     private String image;
 
-    public UserViewForHomePage() {
+    public UserViewModelForHomePage() {
     }
 
-    public UserViewForHomePage(int userId, String fullName, String image) {
+    public UserViewModelForHomePage(int userId, String fullName, String image) {
         this.userId = userId;
         this.fullName = fullName;
         this.image = image;
