@@ -54,9 +54,9 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="/Home" class="nav-item nav-link">Home</a>
                 <a href="/About" class="nav-item nav-link">About</a>
-                <a th:if="${session.user != null && session.user.getRole().getRoleId() == 2}"
+                <a th:if="${session.user != null && session.user.getRoleId() == 2}"
                    href="/ManagerCourse/Create" class="nav-item nav-link">Create Course</a>
-                <a th:if="${session.user != null && session.user.getRole().getRoleId() == 1}" href="/ManagerUser"
+                <a th:if="${session.user != null && session.user.getRoleId() == 1}" href="/ManagerUser"
                    class="nav-item nav-link">Users</a>
                 <a href="/Courses" class="nav-item nav-link">Courses</a>
             </div>
@@ -71,10 +71,10 @@
             <div class="dropdown-menu fade-down m-0">
                 <a href="/Profile" class="dropdown-item">Profile</a>
                 <a href="/MyCourse"
-                   th:class="${'dropdown-item '} + ${session.user == null || session.user.getRole().getRoleId() == 1 ? '' : 'd-none'}">My
+                   th:class="${'dropdown-item '} + ${session.user == null || session.user.getRoleId() == 1 ? '' : 'd-none'}">My
                     Course</a>
                 <a href="/ManagerCourse"
-                   th:class="${'dropdown-item '} + ${session.user != null && session.user.getRole().getRoleId() == 2 ? '' : 'd-none'}">My
+                   th:class="${'dropdown-item '} + ${session.user != null && session.user.getRoleId() == 2 ? '' : 'd-none'}">My
                     Teaching Course</a>
                 <a href="/Logout" class="dropdown-item">Log Out <i class="bi bi-box-arrow-right"></i></a>
             </div>
