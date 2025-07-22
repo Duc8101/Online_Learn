@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NonNull;
-import online_learn.composite.key.EnrollCourseId;
+import online_learn.composite_key.EnrollCourseId;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
