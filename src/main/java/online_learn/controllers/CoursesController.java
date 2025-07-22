@@ -6,6 +6,7 @@ import online_learn.enums.Roles;
 import online_learn.responses.ResponseBase;
 import online_learn.services.courses.ICoursesService;
 import online_learn.dtos.user_dto.UserProfileInfoDTO;
+import online_learn.utils.ParseUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,14 +40,15 @@ public class CoursesController {
     }
 
     @GetMapping({"/Detail", "/Detail/{courseId}"})
-    public ModelAndView detail(@PathVariable(required = false, value = "courseId") Integer courseId, HttpSession session) {
-        if (courseId != null) {
+    public ModelAndView detail(@PathVariable(required = false, value = "courseId") String CourseId, HttpSession session) {
+        if (ParseUtil.intTryParse(CourseId)) {
+            int courseId = Integer.parseInt(CourseId);
             UserProfileInfoDTO user = (UserProfileInfoDTO) session.getAttribute("user");
             ResponseBase responseBase;
             if (user == null || user.getRoleId() != Roles.STUDENT.getValue()) {
-                responseBase = service.detail((int) courseId, null);
+                responseBase = service.detail(courseId, null);
             } else {
-                responseBase = service.detail((int) courseId, user.getUserId());
+                responseBase = service.detail(courseId, user.getUserId());
             }
 
             if (responseBase.getCode() == StatusCodeConst.OK) {

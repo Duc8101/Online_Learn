@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import online_learn.enums.Genders;
+import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -61,8 +62,8 @@ public class User implements Serializable {
     @Column(name = "failed_login_attempts", nullable = false)
     private int failedLoginAttempts;
 
-    @Column(name = "lockout_end_time", nullable = false)
-    @NonNull
+    @Column(name = "lockout_end_time")
+    @Nullable
     private LocalDateTime lockoutEndTime;
 
     @Column(name = "created_at", nullable = false)
