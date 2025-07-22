@@ -1,0 +1,81 @@
+<section th:replace="shared/header" xmlns:th="http://www.thymeleaf.org"></section>
+
+<!--Detail Start -->
+<div class="container-fluid py-5 wow fadeInDown row" data-wow-delay="0.1s">
+  <div class="border col-4">
+    <div class="row g-4 justify-content-center">
+      <div class="col-12 wow fadeInDown" data-wow-delay="0.1s">
+        <div class="course-item bg-light">
+          <div class="position-relative overflow-hidden">
+            <div style="height: 240px">
+              <img style="width: 100%" class="img-fluid" th:src="${course.image}" alt="">
+            </div>
+            <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+              <!--if exist student learn course and exist lesson in course-->
+              <a th:if="${(session.user == null || session.user.roleId == 3) && course.lessonExist && course.enrollCourseExist}" th:href="${'/Courses/LearnCourse/' + course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                 style="border-radius: 0 30px 30px 0;">Learn Course</a>
+
+              <!--if not exist student learn course and exist lesson in course-->
+              <a th:if="${(session.user == null || session.user.roleId == 3) && course.lessonExist && course.enrollCourseExist == false}" th:href="${'/Courses/EnrollCourse/' + course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                 style="border-radius: 0 30px 30px 0;">Enroll Course</a>
+
+              <!-- if login as a teacher and his/her courses-->
+              <div th:if="${session.user != null && session.user.roleId == 2 && session.user.userId == course.creatorId}" class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                <a th:href="${'/ManagerLesson/' + course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                   style="border-radius: 0 30px 30px 0;">View Lesson</a>
+                <a th:href="${'/ManagerCourse/Update/' + course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                   style="border-radius: 0 30px 30px 0;">Update Course</a>
+                <a th:href="${'/ManagerCourse/Delete/' + course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                   style="border-radius: 0 30px 30px 0;" onclick="return confirm('Are you sure you want to delete this course :[[${course.getCourseName()}]]')">Delete Course</a>
+              </div>
+
+              <!-- if login as an admin-->
+              <div th:if="${session.user != null && session.user.roleId == 1}" class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                <a th:href="${'/ViewLesson/' + course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                   style="border-radius: 0 30px 30px 0;">View Lesson</a>
+
+                <a th:href="${'/Courses/Delete/' + course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                   style="border-radius: 0 30px 30px 0;" onclick="return confirm('Are you sure you want to delete this course :\n@(Model.CourseName)')">Delete Course</a>
+              </div>
+
+            </div>
+          </div>
+          <div class="text-center p-4 pb-0">
+            <div class="mb-1">
+            </div>
+            <h5 class="mb-2" th:text="${course.courseName}"></h5>
+
+          </div>
+          <div class="d-flex border-top">
+            <small class="flex-fill text-center border py-2"><i class="fa fa-user-tie text-primary me-2"></i><span th:text="${course.creatorName}"></span></small>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="money-back text-center my-2">30-Day Money-Back Guarantee</div>
+  </div>
+
+
+  <div class="col-8 row">
+    <div class="border row align-items-center ">
+      <b style="font-size: 20px">Course Content Description:</b>
+      <p th:text="${course.description}"></p>
+    </div>
+    <div class="border row">
+      <div class="my-2">
+        <ol class="list-group list-group-numbered">
+          <li th:each="lesson: ${course.lessonListDTOs}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+              <div class="fw-bold" th:text="${lesson.lessonName}"></div>
+            </div>
+          </li>
+        </ol>
+        <h1 th:if="${course.lessonExist == false}" class="mb-4 justify-content-center text-primary"><i class="bi bi-exclamation-triangle display-1 text-primary"></i>This Course Is Under Development Process And Don't Have Any Courses Yet</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Detail End -->
+<section th:replace="shared/footer" xmlns:th="http://www.thymeleaf.org"></section>

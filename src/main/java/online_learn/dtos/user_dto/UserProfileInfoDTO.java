@@ -1,4 +1,4 @@
-package online_learn.view_models.users;
+package online_learn.dtos.user_dto;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class UserProfileInfoViewModel implements Serializable {
+public class UserProfileInfoDTO implements Serializable {
 
     private int userId;
 

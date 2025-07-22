@@ -16,8 +16,8 @@
             <div class="col-2 border">
                 <div class="list-group mt-2">
                     <a th:class="${'py-3 list-group-item list-group-item-action '} + ${categoryId == null ? 'active' : ''}" href="/Courses">ALL</a>
-                    <a th:each="category: ${categories}" th:class="${'py-3 list-group-item list-group-item-action '} + ${category.getCategoryId() == categoryId ? 'active' : ''}" th:href="${'/Courses?categoryId='} + ${category.getCategoryId()}">
-                        <span th:text="${category.getCategoryName()}"></span></a>
+                    <a th:each="category: ${categories}" th:class="${'py-3 list-group-item list-group-item-action '} + ${category.categoryId == categoryId ? 'active' : ''}" th:href="${'/Courses?categoryId='} + ${category.categoryId}">
+                        <span th:text="${category.categoryName}"></span></a>
                 </div>
             </div>
 
@@ -35,69 +35,69 @@
                 </form>
 
                 <div class="row g-4 justify-content-center">
-                    <div th:each="course: ${pagination.getList()}" class="col-lg-4 col-md-6 wow fadeInDown" data-wow-delay="0.1s">
+                    <div th:each="course: ${pagination.list}" class="col-lg-4 col-md-6 wow fadeInDown" data-wow-delay="0.1s">
                         <div class="course-item bg-light">
                             <div class="position-relative overflow-hidden">
                                 <div style="height: 240px">
-                                    <img class="img-fluid w-100" th:src="${course.getImage()}" alt="">
+                                    <img class="img-fluid w-100" th:src="${course.image}" alt="">
                                 </div>
 
                                 <!--if not login or login as a student-->
-                                <div th:if="${session.user == null || session.user.getRoleId() == 3}" class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
-                                    <a th:href="${'/Courses/Detail/'} + ${course.getCourseId()}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
-                                       th:style="${'border-radius: 30px '} + ${course.isLessonExist() ? '0 0' : ''} + ${' 30px;'}">
+                                <div th:if="${session.user == null || session.user.roleId == 3}" class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                                    <a th:href="${'/Courses/Detail/'} + ${course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
+                                       th:style="${'border-radius: 30px '} + ${course.lessonExist ? '0 0' : ''} + ${' 30px;'}">
                                     Read More
                                     </a>
 
                                     <!--if exist student learn course and exist lesson in course-->
-                                    <a th:if="${course.isLessonExist() && course.isEnrollCourseExist()}" th:href="${'/Courses/LearnCourse/'} + ${course.getCourseId()}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                                    <a th:if="${course.lessonExist && course.enrollCourseExist}" th:href="${'/Courses/LearnCourse/'} + ${course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
                                        style="border-radius: 0 30px 30px 0;">Learn Course</a>
 
                                     <!--if not exist student learn course and exist lesson in course-->
-                                    <a th:if="${course.isLessonExist()}" th:href="${'/Courses/EnrollCourse/'} + ${course.getCourseId()}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                                    <a th:if="${course.lessonExist && course.enrollCourseExist == false}" th:href="${'/Courses/EnrollCourse/'} + ${course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
                                        style="border-radius: 0 30px 30px 0;">Enroll Course</a>
                                 </div>
 
                                 <!-- if login as a teacher and his/her courses-->
-                                <div th:if="${session.user != null && session.user.getRoleId() == 2 && session.user.getUserId() == course.getCreatorId()}" class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                                <div th:if="${session.user != null && session.user.roleId == 2 && session.user.userId == course.creatorId}" class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
                                     <div class="row">
-                                        <a th:href="${'/Courses/Detail/'} + ${course.getCourseId()}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
-                                           th:style="${'border-radius: 30px '} + ${course.isLessonExist() ? '0 0' : ''} + ${'30px;'}">
+                                        <a th:href="${'/Courses/Detail/'} + ${course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
+                                           th:style="${'border-radius: 30px '} + ${course.lessonExist ? '0 0' : ''} + ${'30px;'}">
                                         Read More
                                         </a>
 
-                                        <a th:href="${'/ManagerLesson/'} + ${course.getCourseId()}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                                        <a th:href="${'/ManagerLesson/'} + ${course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
                                            style="border-radius: 0 30px 30px 0;">View Lesson</a>
                                     </div>
 
                                     <div class="row">
-                                        <a th:href="${'/ManagerCourse/Update/'}+ ${course.getCourseId()}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                                        <a th:href="${'/ManagerCourse/Update/'}+ ${course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
                                            style="border-radius: 0 30px 30px 0;">Update Course</a>
-                                        <a th:href="${'/ManagerCourse/Delete/'}+ ${course.getCourseId()}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                                        <a th:href="${'/ManagerCourse/Delete/'}+ ${course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
                                            style="border-radius: 0 30px 30px 0;" onclick="return confirm('Are you sure you want to delete this course :[[${course.getCourseName()}]]')">Delete Course</a>
                                     </div>
 
                                 </div>
 
                                 <!-- if login as a teacher but not his/her courses-->
-                                <div th:if="${session.user != null && session.user.getRoleId() == 2 && session.user.getUserId() != course.getCreatorId()}" class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
-                                    <a th:href="${'/Courses/Detail/'}+ ${course.getCourseId()}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
-                                       th:style="${'border-radius: 30px '} + ${course.isLessonExist() ? '0 0' : ''} + ${'30px;'}">
+                                <div th:if="${session.user != null && session.user.getRoleId() == 2 && session.user.userId != course.creatorId}" class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                                    <a th:href="${'/Courses/Detail/'}+ ${course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
+                                       th:style="${'border-radius: 30px '} + ${course.lessonExist ? '0 0' : ''} + ${'30px;'}">
                                     Read More
                                     </a>
                                 </div>
 
                                 <!-- if login as an admin-->
-                                <div th:if="${session.user != null && session.user.getRoleId() == 1}" class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
-                                    <a th:href="${'/Courses/Detail/'} + ${course.getCourseId()}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
-                                       th:style="${'border-radius: 30px '} + ${course.isLessonExist() ? '0 0' : ''} + ${'30px;'}">
+                                <div th:if="${session.user != null && session.user.roleId == 1}" class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                                    <a th:href="${'/Courses/Detail/'} + ${course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3 border-end"
+                                       th:style="${'border-radius: 30px '} + ${course.lessonExist ? '0 0' : ''} + ${'30px;'}">
                                     Read More
                                     </a>
 
-                                    <a th:href="${'/ViewLesson/'} + ${course.getCourseId()}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                                    <a th:href="${'/ViewLesson/'} + ${course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
                                        style="border-radius: 0 30px 30px 0;">View Lesson</a>
 
-                                    <a th:href="${'/Courses/Delete/'} + ${course.getCourseId()}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                                    <a th:href="${'/Courses/Delete/'} + ${course.courseId}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
                                        onclick="return confirm('Are you sure you want to delete this course :[[${course.getCourseName()}]]')">Delete Course</a>
 
                                 </div>
@@ -107,7 +107,7 @@
                                 <div class="mb-1">
                                 </div>
 
-                                <h5 class="mb-2" th:text="${course.getCourseName().length() <= 24 ? course.getCourseName() : course.getCourseName().substring(0, 24) + '...'}"></h5>
+                                <h5 class="mb-2" th:text="${course.courseName.length() <= 24 ? course.courseName : course.courseName.substring(0, 24) + '...'}"></h5>
                             </div>
 
 
@@ -119,24 +119,24 @@
 
                     <nav th:if="${pagination.getNumberPage() > 1}" aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
-                            <li th:class= "${'page-item ' + (pagination.getCurrentPage() == 1 ? 'disabled' : '')}">
-                                <a class="page-link" th:href="${pagination.getFirstUrl()}">First</a>
+                            <li th:class= "${'page-item ' + (pagination.currentPage == 1 ? 'disabled' : '')}">
+                                <a class="page-link" th:href="${pagination.firstUrl}">First</a>
                             </li>
 
-                            <li th:class= "${'page-item ' + (pagination.getCurrentPage() == 1 ? 'disabled' : '')}">
-                                <a class="page-link" th:href="${pagination.getPreUrl()}">Previous</a>
+                            <li th:class= "${'page-item ' + (pagination.currentPage == 1 ? 'disabled' : '')}">
+                                <a class="page-link" th:href="${pagination.preUrl}">Previous</a>
                             </li>
 
-                            <li th:class= "${'page-item ' + (pagination.getCurrentPage() == 1 ? 'disabled' : '')}">
-                                <a class="page-link"><span th:text="${pagination.getCurrentPage() + '/' + pagination.getNumberPage()}"></span></a>
+                            <li class= "page-item">
+                                <a class="page-link"><span th:text="${pagination.currentPage + '/' + pagination.getNumberPage()}"></span></a>
                             </li>
 
-                            <li th:class= "${'page-item ' + (pagination.getCurrentPage() == pagination.getNumberPage() ? 'disabled' : '')}">
-                                <a th:class="${'page-link '}" th:href="${pagination.getNextUrl()}">Next</a>
+                            <li th:class= "${'page-item ' + (pagination.currentPage == pagination.getNumberPage() ? 'disabled' : '')}">
+                                <a th:class="${'page-link '}" th:href="${pagination.nextUrl}">Next</a>
                             </li>
 
-                            <li th:class= "${'page-item ' + (pagination.getCurrentPage() == pagination.getNumberPage() ? 'disabled' : '')}">
-                                <a th:class="${'page-link '}" th:href="${pagination.getLastUrl()}">Last</a>
+                            <li th:class= "${'page-item ' + (pagination.currentPage == pagination.getNumberPage() ? 'disabled' : '')}">
+                                <a th:class="${'page-link '}" th:href="${pagination.lastUrl}">Last</a>
                             </li>
                         </ul>
                     </nav>

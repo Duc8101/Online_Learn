@@ -1,20 +1,20 @@
-package online_learn.view_models.users;
+package online_learn.dtos.user_dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class UserViewModelForHomePage {
+public class UserInfoForHomePageDTO {
 
     private int userId;
     private String fullName;
     private String image;
 
-    public UserViewModelForHomePage() {
+    public UserInfoForHomePageDTO() {
     }
 
-    public UserViewModelForHomePage(int userId, String fullName, String image) {
+    public UserInfoForHomePageDTO(int userId, String fullName, String image) {
         this.userId = userId;
         this.fullName = fullName;
         this.image = image;

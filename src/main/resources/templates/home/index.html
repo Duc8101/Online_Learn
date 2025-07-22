@@ -59,10 +59,10 @@
                  th:data-wow-delay="${0.1 + iterStatus.index * 0.2} + ${'s'}">
                 <div class="team-item bg-light">
                     <div class="overflow-hidden">
-                        <img class="img-fluid" th:src="${user.getImage()}" alt="">
+                        <img class="img-fluid" th:src="${user.image}" alt="">
                     </div>
                     <div class="text-center p-4">
-                        <h5 class="mb-0" th:text="${user.getFullName()}">Name</h5>
+                        <h5 class="mb-0" th:text="${user.fullName}">Name</h5>
                         <small>Teacher</small>
                     </div>
                 </div>
@@ -71,6 +71,8 @@
     </div>
 
 </div>
+
+<!-- Team End -->
 
 <!-- Testimonial Start -->
 <div class="container-xxl py-5 wow fadeInDown" data-wow-delay="0.1s">

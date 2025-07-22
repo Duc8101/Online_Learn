@@ -1,4 +1,4 @@
-package online_learn.view_models.courses;
+package online_learn.dtos.course_dto;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -7,12 +7,12 @@ import org.springframework.lang.Nullable;
 
 @Getter
 @Setter
-public class GetStudentOrTeacherCoursesViewModel {
+public class GetStudentOrTeacherCoursesDTO {
 
-    public GetStudentOrTeacherCoursesViewModel() {
+    public GetStudentOrTeacherCoursesDTO() {
     }
 
-    public GetStudentOrTeacherCoursesViewModel(int courseId, @NonNull String courseName, @NonNull String image, int categoryId, int creatorId, @NonNull String creatorName, @Nullable String description) {
+    public GetStudentOrTeacherCoursesDTO(int courseId, @NonNull String courseName, @NonNull String image, int categoryId, int creatorId, @NonNull String creatorName, @Nullable String description) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.image = image;

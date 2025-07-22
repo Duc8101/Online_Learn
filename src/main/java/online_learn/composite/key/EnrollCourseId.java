@@ -1,4 +1,4 @@
-package online_learn.composite_key;
+package online_learn.composite.key;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

@@ -2,6 +2,8 @@ package online_learn.services.courses;
 
 import online_learn.constants.PageSizeConst;
 import online_learn.constants.StatusCodeConst;
+import online_learn.dtos.course_dto.CourseDetailDTO;
+import online_learn.dtos.lesson_dto.LessonListForCourseDetailOrViewLessonDTO;
 import online_learn.entity.Course;
 import online_learn.paging.Pagination;
 import online_learn.repositories.ICategoryRepository;
@@ -9,14 +11,11 @@ import online_learn.repositories.ICourseRepository;
 import online_learn.repositories.IEnrollCourseRepository;
 import online_learn.responses.ResponseBase;
 import online_learn.services.base.BaseService;
-import online_learn.view_models.categories.CategoryViewModel;
-import online_learn.view_models.courses.GetAllCoursesViewModel;
+import online_learn.dtos.category_dto.CategoryListDTO;
+import online_learn.dtos.course_dto.GetAllCoursesDTO;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -47,7 +46,7 @@ public class CoursesService extends BaseService implements ICoursesService {
         try {
             int currentPage = page == null ? 1 : page;
             // get categories
-            List<CategoryViewModel> categories = categoryRepository.findAll().stream().map(c -> new CategoryViewModel(c.getCategoryId(), c.getCategoryName()))
+            List<CategoryListDTO> categories = categoryRepository.findAll().stream().map(c -> new CategoryListDTO(c.getCategoryId(), c.getCategoryName()))
                     .toList();
 
             // ------------------------- get courses ----------------------------
@@ -64,15 +63,15 @@ public class CoursesService extends BaseService implements ICoursesService {
 
             Supplier<Stream<Course>> streamSupplier = () -> getStream(categoryId);
 
-            List<GetAllCoursesViewModel> courses = streamSupplier.get().sorted(comparator).skip((long)PageSizeConst.COURSES_PAGE * (currentPage - 1))
-                    .limit(PageSizeConst.COURSES_PAGE).map(c -> new GetAllCoursesViewModel(c.getCourseId()
+            List<GetAllCoursesDTO> courses = streamSupplier.get().sorted(comparator).skip((long) PageSizeConst.COURSES_PAGE * (currentPage - 1))
+                    .limit(PageSizeConst.COURSES_PAGE).map(c -> new GetAllCoursesDTO(c.getCourseId()
                             , c.getCourseName(), c.getImage(), c.getCategory().getCategoryId(), c.getCreator().getUserId()
                             , c.getCreator().getFullName(), c.getDescription(), !c.getLessons().isEmpty(), false))
                     .toList();
 
             // if login as a student
             if (studentId != null) {
-                for (GetAllCoursesViewModel course : courses) {
+                for (GetAllCoursesDTO course : courses) {
                     course.setEnrollCourseExist(enrollCourseRepository.findAll().stream()
                             .anyMatch(ec -> ec.getCourse().getCourseId() == course.getCourseId()
                                     && ec.getStudent().getUserId() == studentId));
@@ -80,7 +79,7 @@ public class CoursesService extends BaseService implements ICoursesService {
             }
 
             // ------------------------- set pagination ----------------------------
-            Pagination<GetAllCoursesViewModel> pagination = new Pagination<>();
+            Pagination<GetAllCoursesDTO> pagination = new Pagination<>();
             pagination.setCurrentPage(currentPage);
             pagination.setList(courses);
             pagination.setPageSize(PageSizeConst.COURSES_PAGE);
@@ -132,7 +131,52 @@ public class CoursesService extends BaseService implements ICoursesService {
             return new ResponseBase(StatusCodeConst.OK, data);
         } catch (Exception e) {
             data.clear();
-            data.put("exception", e.getMessage() + " " + e);
+            data.put("error", e.getMessage() + " " + e);
+            data.put("code", StatusCodeConst.INTERNAL_SERVER_ERROR);
+            setValueForHeaderFooter(data, true, true, true, true);
+            return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
+        }
+    }
+
+    @Override
+    public ResponseBase detail(int courseId, Integer studentId) {
+        Map<String, Object> data = new HashMap<>();
+        try {
+            setValueForHeaderFooter(data, true, true, true, true);
+            Course course = courseRepository.findById(courseId).orElse(null);
+            if (course == null) {
+                data.put("error", String.format("Course with id = %d does not exist", courseId));
+                data.put("code", StatusCodeConst.NOT_FOUND);
+                return new ResponseBase(StatusCodeConst.NOT_FOUND, data);
+            }
+
+            CourseDetailDTO courseDetailDTO = new CourseDetailDTO();
+            courseDetailDTO.setCourseId(courseId);
+            courseDetailDTO.setCourseName(course.getCourseName());
+            courseDetailDTO.setImage(course.getImage());
+            courseDetailDTO.setDescription(course.getDescription());
+            courseDetailDTO.setCategoryId(course.getCategory().getCategoryId());
+            courseDetailDTO.setCreatorId(course.getCreator().getUserId());
+            courseDetailDTO.setCreatorName(course.getCreator().getFullName());
+            courseDetailDTO.setLessonExist(!course.getLessons().isEmpty());
+
+            List<LessonListForCourseDetailOrViewLessonDTO> lessonListDTOs = course.getLessons().stream()
+                    .map(l -> new LessonListForCourseDetailOrViewLessonDTO(l.getLessonId(), l.getLessonName()
+                            , l.getCourse().getCourseId())).toList();
+            courseDetailDTO.setLessonListDTOs(lessonListDTOs);
+
+            // if login as a student
+            if (studentId != null) {
+                courseDetailDTO.setEnrollCourseExist(enrollCourseRepository.findAll().stream()
+                        .anyMatch(ec -> ec.getCourse().getCourseId() == course.getCourseId()
+                                && ec.getStudent().getUserId() == studentId));
+            }
+
+            data.put("course", courseDetailDTO);
+            return new ResponseBase(StatusCodeConst.OK, data);
+        } catch (Exception e) {
+            data.clear();
+            data.put("error", e.getMessage() + " " + e);
             data.put("code", StatusCodeConst.INTERNAL_SERVER_ERROR);
             setValueForHeaderFooter(data, true, true, true, true);
             return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);

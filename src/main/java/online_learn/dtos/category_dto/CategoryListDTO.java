@@ -1,19 +1,19 @@
-package online_learn.view_models.categories;
+package online_learn.dtos.category_dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CategoryViewModel {
+public class CategoryListDTO {
 
     private int categoryId;
     private String categoryName;
 
-    public CategoryViewModel() {
+    public CategoryListDTO() {
     }
 
-    public CategoryViewModel(int categoryId, String categoryName) {
+    public CategoryListDTO(int categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
     }
