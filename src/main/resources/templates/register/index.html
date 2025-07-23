@@ -1,0 +1,95 @@
+<section th:replace="shared/header" xmlns:th="http://www.thymeleaf.org"></section>
+
+<section class="h-100" style="background-color: #06BBCC">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+                <div class="card card-registration my-4">
+                    <div class="row g-0">
+                        <div class="col-xl-6 d-none d-xl-block">
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp"
+                                 alt="Sample photo" class="img-fluid"
+                                 style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+                        </div>
+                        <div class="col-xl-6">
+                            <form action="/Register" method="post" id="form">
+                                <div class="card-body p-md-5 text-black">
+                                    <h3 class="mb-5 text-uppercase">CREATE ACCOUNT</h3>
+                                    <p class="text-danger" id="error" th:text="${error}"></p>
+                                    <p style="color: green" th:text="${success}"></p>
+                                    <div class="row">
+                                        <div class="col-md-12 mb-6">
+                                            <div class="form-outline">
+                                                <input type="text" name="FullName" value="" class="form-control form-control-lg" required id="fullName" />
+                                                <label class="form-label">Full Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <input type="number" name="Phone" value="" class="form-control form-control-lg" id="phone" />
+                                                <label class="form-label">Phone (Optional)</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <input type="email" name="Email" value="" class="form-control form-control-lg" required id="email" />
+                                                <label class="form-label">Email</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <input type="text" name="Address" class="form-control form-control-lg" id="address" />
+                                        <label class="form-label">Address (Optional)</label>
+                                    </div>
+
+                                    <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+
+                                        <h6 class="mb-0 me-4">Gender: </h6>
+
+                                        <div class="form-check form-check-inline mb-0 me-4">
+                                            <input class="form-check-input" type="radio" name="Gender" id="femaleGender"
+                                                   th:value="${female}" />
+                                            <label class="form-check-label" for="femaleGender">Female</label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline mb-0 me-4">
+                                            <input class="form-check-input" type="radio" name="Gender" id="maleGender"
+                                                   th:value="${male}" checked />
+                                            <label class="form-check-label" for="maleGender">Male</label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline mb-0">
+                                            <input class="form-check-input" type="radio" name="Gender" id="otherGender"
+                                                   th:value="${other}" />
+                                            <label class="form-check-label" for="otherGender">Other</label>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <input type="text" name="Username"  class="form-control form-control-lg" required id="username" />
+                                        <label class="form-label">Username</label>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end pt-3">
+                                        <button type="reset" class="btn btn-light btn-lg">Reset all</button>
+                                        <button type="submit" class="btn btn-warning btn-lg ms-2">Submit</button>
+                                    </div>
+                                    <div class="d-flex justify-content-start pt-3">
+                                        <a href="/Login" class="btn btn-outline-warning"><i class="bi bi-arrow-left-circle"></i> Back </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section th:replace="shared/footer" xmlns:th="http://www.thymeleaf.org"></section>
