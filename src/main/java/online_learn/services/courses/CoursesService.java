@@ -85,42 +85,42 @@ public class CoursesService extends BaseService implements ICoursesService {
             pagination.setPageSize(PageSizeConst.COURSES_PAGE);
             pagination.setTotalElement(streamSupplier.get().count());
 
-            StringBuilder preUrl = new StringBuilder("/Courses");
-            StringBuilder nextUrl = new StringBuilder("/Courses");
-            StringBuilder firstUrl = new StringBuilder("/Courses");
-            StringBuilder lastUrl = new StringBuilder("/Courses");
+            String preUrl = "/Courses";
+            String nextUrl = "/Courses";
+            String firstUrl = "/Courses";
+            String lastUrl = "/Courses";
 
             if (orderBy == null) {
                 // if not choose category
                 if (categoryId == null) {
-                    preUrl.append(String.format("?page=%d", currentPage - 1));
-                    nextUrl.append(String.format("?page=%d", currentPage + 1));
-                    lastUrl.append(String.format("?page=%d", pagination.getNumberPage()));
+                    preUrl = preUrl + String.format("?page=%d", currentPage - 1);
+                    nextUrl = nextUrl + String.format("?page=%d", currentPage + 1);
+                    lastUrl = lastUrl + String.format("?page=%d", pagination.getNumberPage());
                 } else {
-                    preUrl.append(String.format("?categoryId=%d&page=%d", categoryId, currentPage - 1));
-                    nextUrl.append(String.format("?categoryId=%d&page=%d", categoryId, currentPage + 1));
-                    firstUrl.append(String.format("?categoryId=%d", categoryId));
-                    lastUrl.append(String.format("?categoryId=%d&page=%d", categoryId, pagination.getNumberPage()));
+                    preUrl = preUrl + String.format("?categoryId=%d&page=%d", categoryId, currentPage - 1);
+                    nextUrl = nextUrl + String.format("?categoryId=%d&page=%d", categoryId, currentPage + 1);
+                    firstUrl = firstUrl + String.format("?categoryId=%d", categoryId);
+                    lastUrl = lastUrl + String.format("?categoryId=%d&page=%d", categoryId, pagination.getNumberPage());
                 }
             } else {
                 // if not choose category
                 if (categoryId == null) {
-                    preUrl.append(String.format("?orderBy=%b&page=%d", orderBy, currentPage - 1));
-                    nextUrl.append(String.format("?orderBy=%b&page=%d", orderBy, currentPage + 1));
-                    firstUrl.append(String.format("?orderBy=%b", orderBy));
-                    lastUrl.append(String.format("?orderBy=%b&page=%d", orderBy, pagination.getNumberPage()));
+                    preUrl = preUrl + String.format("?orderBy=%b&page=%d", orderBy, currentPage - 1);
+                    nextUrl = nextUrl + String.format("?orderBy=%b&page=%d", orderBy, currentPage + 1);
+                    firstUrl = firstUrl + String.format("?orderBy=%b", orderBy);
+                    lastUrl = lastUrl + String.format("?orderBy=%b&page=%d", orderBy, pagination.getNumberPage());
                 } else {
-                    preUrl.append(String.format("?categoryId=%d&orderBy=%b&page=%d", categoryId, orderBy, currentPage - 1));
-                    nextUrl.append(String.format("?categoryId=%d&orderBy=%b&page=%d", categoryId, orderBy, currentPage + 1));
-                    firstUrl.append(String.format("?categoryId=%d&orderBy=%b", categoryId, orderBy));
-                    lastUrl.append(String.format("?categoryId=%d&orderBy=%b&page=%d", categoryId, orderBy, pagination.getNumberPage()));
+                    preUrl = preUrl + String.format("?categoryId=%d&orderBy=%b&page=%d", categoryId, orderBy, currentPage - 1);
+                    nextUrl = nextUrl + String.format("?categoryId=%d&orderBy=%b&page=%d", categoryId, orderBy, currentPage + 1);
+                    firstUrl = firstUrl + String.format("?categoryId=%d&orderBy=%b", categoryId, orderBy);
+                    lastUrl = lastUrl + String.format("?categoryId=%d&orderBy=%b&page=%d", categoryId, orderBy, pagination.getNumberPage());
                 }
             }
 
-            pagination.setPreUrl(preUrl.toString());
-            pagination.setNextUrl(nextUrl.toString());
-            pagination.setFirstUrl(firstUrl.toString());
-            pagination.setLastUrl(lastUrl.toString());
+            pagination.setPreUrl(preUrl);
+            pagination.setNextUrl(nextUrl);
+            pagination.setFirstUrl(firstUrl);
+            pagination.setLastUrl(lastUrl);
 
             // ------------------------- set data ----------------------------
             data.put("pagination", pagination);

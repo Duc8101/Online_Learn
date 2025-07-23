@@ -36,10 +36,12 @@ public class LoginService extends BaseService implements ILoginService {
             Cookie[] cookies = request.getCookies();
 
             String UserId = null;
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("userId")) {
-                    UserId = cookie.getValue();
-                    break;
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("userId")) {
+                        UserId = cookie.getValue();
+                        break;
+                    }
                 }
             }
 
@@ -120,9 +122,9 @@ public class LoginService extends BaseService implements ILoginService {
 
                 LocalDateTime lockoutEndTime;
                 // if failed enough 5 times
-                if (user.getLockoutEndTime() == null)
-                {
-                    user.setLockoutEndTime(LocalDateTime.now().plusMinutes(15));;
+                if (user.getLockoutEndTime() == null) {
+                    user.setLockoutEndTime(LocalDateTime.now().plusMinutes(15));
+                    ;
                     userRepository.save(user);
                 }
                 lockoutEndTime = user.getLockoutEndTime();
@@ -134,8 +136,7 @@ public class LoginService extends BaseService implements ILoginService {
             }
 
             // if true password but lockoutTime not end
-            if (user.getLockoutEndTime() != null && user.getLockoutEndTime().isAfter(LocalDateTime.now()))
-            {
+            if (user.getLockoutEndTime() != null && user.getLockoutEndTime().isAfter(LocalDateTime.now())) {
                 setValueForHeaderFooter(data, true, false, false, true);
                 int numberMinutes = user.getLockoutEndTime().getMinute() - LocalDateTime.now().getMinute();
                 String strMinutes = user.getLockoutEndTime().getMinute() - LocalDateTime.now().getMinute() == 1 ? "minute" : "minutes";
@@ -144,8 +145,7 @@ public class LoginService extends BaseService implements ILoginService {
             }
 
             // if true password and lockoutTime end
-            if (user.getFailedLoginAttempts() > 0)
-            {
+            if (user.getFailedLoginAttempts() > 0) {
                 user.setFailedLoginAttempts(0);
                 user.setLockoutEndTime(null);
                 userRepository.save(user);
