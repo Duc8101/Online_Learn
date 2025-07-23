@@ -1,11 +1,12 @@
 package online_learn.utils;
 
 import jakarta.mail.*;
-import jakarta.mail.internet.*;
-import java.util.Properties;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
 import java.util.Random;
 
 public class UserUtil {
@@ -72,5 +73,11 @@ public class UserUtil {
 
         // Gửi email
         Transport.send(message);
+    }
+
+    public static String bodyEmailForRegister(String password)
+    {
+        return "<h1>Mật khẩu cho tài khoản mới</h1>\n" +
+                "<p>Mật khẩu của bạn là: " + password + "</p>\n";
     }
 }

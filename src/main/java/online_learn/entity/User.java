@@ -27,16 +27,16 @@ public class User implements Serializable {
     @NonNull
     private String fullName;
 
-    @Column(name = "phone", nullable = false)
-    @NonNull
+    @Column(name = "phone")
+    @Nullable
     private String phone;
 
     @Column(name = "image", nullable = false)
     @NonNull
     private String image;
 
-    @Column(name = "address", nullable = false)
-    @NonNull
+    @Column(name = "address")
+    @Nullable
     private String address;
 
     @Column(name = "email", nullable = false)

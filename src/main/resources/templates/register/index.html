@@ -20,7 +20,7 @@
                                     <div class="row">
                                         <div class="col-md-12 mb-6">
                                             <div class="form-outline">
-                                                <input type="text" name="FullName" value="" class="form-control form-control-lg" required id="fullName" />
+                                                <input type="text" name="fullName" value="" class="form-control form-control-lg" required id="fullName" />
                                                 <label class="form-label">Full Name</label>
                                             </div>
                                         </div>
@@ -29,20 +29,20 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-4">
                                             <div class="form-outline">
-                                                <input type="number" name="Phone" value="" class="form-control form-control-lg" id="phone" />
+                                                <input type="number" name="phone" value="" class="form-control form-control-lg" id="phone" />
                                                 <label class="form-label">Phone (Optional)</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6 mb-4">
                                             <div class="form-outline">
-                                                <input type="email" name="Email" value="" class="form-control form-control-lg" required id="email" />
+                                                <input type="email" name="email" value="" class="form-control form-control-lg" required id="email" />
                                                 <label class="form-label">Email</label>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="form-outline mb-4">
-                                        <input type="text" name="Address" class="form-control form-control-lg" id="address" />
+                                        <input type="text" name="address" class="form-control form-control-lg" id="address" />
                                         <label class="form-label">Address (Optional)</label>
                                     </div>
 
@@ -51,19 +51,19 @@
                                         <h6 class="mb-0 me-4">Gender: </h6>
 
                                         <div class="form-check form-check-inline mb-0 me-4">
-                                            <input class="form-check-input" type="radio" name="Gender" id="femaleGender"
+                                            <input class="form-check-input" type="radio" name="gender" id="femaleGender"
                                                    th:value="${female}" />
                                             <label class="form-check-label" for="femaleGender">Female</label>
                                         </div>
 
                                         <div class="form-check form-check-inline mb-0 me-4">
-                                            <input class="form-check-input" type="radio" name="Gender" id="maleGender"
+                                            <input class="form-check-input" type="radio" name="gender" id="maleGender"
                                                    th:value="${male}" checked />
                                             <label class="form-check-label" for="maleGender">Male</label>
                                         </div>
 
                                         <div class="form-check form-check-inline mb-0">
-                                            <input class="form-check-input" type="radio" name="Gender" id="otherGender"
+                                            <input class="form-check-input" type="radio" name="gender" id="otherGender"
                                                    th:value="${other}" />
                                             <label class="form-check-label" for="otherGender">Other</label>
                                         </div>
@@ -71,12 +71,12 @@
                                     </div>
 
                                     <div class="form-outline mb-4">
-                                        <input type="text" name="Username"  class="form-control form-control-lg" required id="username" />
+                                        <input type="text" name="username" class="form-control form-control-lg" required id="username" />
                                         <label class="form-label">Username</label>
                                     </div>
 
                                     <div class="d-flex justify-content-end pt-3">
-                                        <button type="reset" class="btn btn-light btn-lg">Reset all</button>
+                                        <button type="reset" class="btn btn-light btn-lg" id="reset">Reset all</button>
                                         <button type="submit" class="btn btn-warning btn-lg ms-2">Submit</button>
                                     </div>
                                     <div class="d-flex justify-content-start pt-3">
@@ -91,5 +91,41 @@
         </div>
     </div>
 </section>
+
+<script>
+    const fullNameInput = document.getElementById("fullName");
+    const emailInput = document.getElementById("email");
+    const phoneInput = document.getElementById("phone");
+    const addressInput = document.getElementById("address");
+    const usernameInput = document.getElementById("username");
+
+    const patternEmail = /^[a-zA-Z][\w-]+@([\w]+\.[\w]+|[\w]+\.[\w]{2,}\.[\w]{2,})$/;
+    const patternUsername = /^(?=.{6,30}$)(?!.*[_.]{2})[a-zA-Z0-9]+([_.]?[a-zA-Z0-9]+)*$/;
+
+    document.getElementById("form").addEventListener("submit", function (event) {
+       if (fullNameInput.value.trim().length === 0) {
+           document.getElementById("error").innerHTML = "You have to input your name";
+           event.preventDefault();
+       } else if (phoneInput.value.length !== 0 && phoneInput.value.length !== 10) {
+           document.getElementById("error").innerHTML = "Phone must be 10 numbers";
+           event.preventDefault();
+       } else if (!patternEmail.test(emailInput.value.trim()) || emailInput.value.trim().length < 6 || emailInput.value.trim().length > 50) {
+           document.getElementById("error").innerHTML = "Email invalid";
+           event.preventDefault();
+       } else if (addressInput.value.trim().length > 100) {
+           document.getElementById("error").innerHTML = "Address maximum 100 characters";
+           event.preventDefault();
+       } else if (!patternUsername.test(usernameInput.value)) {
+           document.getElementById("error").innerHTML = "The username contains only alphabet and numbers, (_) or (.), doesn't start with (_) or (.)" +
+               ". \\nNo consecutive _ or . characters allowed" +
+               ". \\nMinimum 6 characters and maximum 50 characters";
+           event.preventDefault();
+       }
+    });
+
+    document.getElementById("reset").addEventListener("click", function () {
+        document.getElementById("error").innerHTML = "";
+    })
+</script>
 
 <section th:replace="shared/footer" xmlns:th="http://www.thymeleaf.org"></section>
