@@ -2,10 +2,8 @@ package online_learn.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import online_learn.enums.Answers;
-import org.springframework.lang.Nullable;
 
 @Entity
 @Table(name = "start_quiz")
@@ -20,15 +18,12 @@ public class StartQuiz {
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
-    @NonNull
     private User student;
 
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
-    @NonNull
     private Question question;
 
     @Column(name = "answer")
-    @Nullable
     private Answers answer;
 }

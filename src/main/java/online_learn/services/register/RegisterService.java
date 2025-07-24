@@ -74,7 +74,7 @@ public class RegisterService extends BaseService implements IRegisterService {
             user.setAddress(DTO.getAddress() == null || DTO.getAddress().trim().isEmpty() ? null : DTO.getAddress().trim());
             user.setImage("https://i.pinimg.com/564x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg");
 
-            Role role = roleRepository.findById(Roles.STUDENT.getValue()).orElse(null);
+            Role role = roleRepository.findById(Roles.STUDENT.getValue()).orElseThrow(() -> new RuntimeException("Role not Found"));
 
             String body = UserUtil.bodyEmailForRegister(newPw);
             UserUtil.sendEmail("Welcome to Online Learn", body, DTO.getEmail().trim());

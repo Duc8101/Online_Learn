@@ -3,7 +3,6 @@ package online_learn.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ public class Category implements Serializable {
     private int categoryId;
 
     @Column(name = "category_name", nullable = false)
-    @NonNull
     private String categoryName;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)

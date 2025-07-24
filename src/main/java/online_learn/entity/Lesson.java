@@ -3,7 +3,6 @@ package online_learn.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.lang.NonNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -22,20 +21,16 @@ public class Lesson implements Serializable {
     private int lessonId;
 
     @Column(name = "lesson_name", nullable = false)
-    @NonNull
     private String lessonName;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
-    @NonNull
     private Course course;
 
     @Column(name = "created_at", nullable = false)
-    @NonNull
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    @NonNull
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
@@ -46,5 +41,4 @@ public class Lesson implements Serializable {
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private List<Quiz> quizzes = new ArrayList<>();
-
 }

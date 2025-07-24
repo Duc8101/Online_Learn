@@ -22,18 +22,10 @@ public class ForgotPasswordService extends BaseService implements IForgotPasswor
     }
 
     @Override
-    public ResponseBase index() {
+    public Map<String, Object> index() {
         Map<String, Object> data = new HashMap<>();
-        try {
-            setValueForHeaderFooter(data, true, false, false, true);
-            return new ResponseBase(StatusCodeConst.OK, data);
-        } catch (Exception e) {
-            data.clear();
-            data.put("error", e.getMessage() + " " + e);
-            data.put("code", StatusCodeConst.INTERNAL_SERVER_ERROR);
-            setValueForHeaderFooter(data, true, true, true, true);
-            return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
-        }
+        setValueForHeaderFooter(data, true, true, true, true);
+        return data;
     }
 
     @Override

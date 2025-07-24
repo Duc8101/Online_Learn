@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/ForgotPassword")
 public class ForgotPasswordController {
@@ -21,8 +23,8 @@ public class ForgotPasswordController {
 
     @GetMapping("")
     public ModelAndView index() {
-        ResponseBase responseBase = service.index();
-        return new ModelAndView("forgot_password/index",  responseBase.getData());
+        Map<String, Object> data = service.index();
+        return new ModelAndView("forgot_password/index",  data);
     }
 
     @PostMapping("")

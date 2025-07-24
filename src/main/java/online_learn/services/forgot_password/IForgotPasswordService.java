@@ -2,8 +2,10 @@ package online_learn.services.forgot_password;
 
 import online_learn.responses.ResponseBase;
 
+import java.util.Map;
+
 public interface IForgotPasswordService {
 
-    ResponseBase index();
+    Map<String, Object> index();
     ResponseBase index(String email);
 }

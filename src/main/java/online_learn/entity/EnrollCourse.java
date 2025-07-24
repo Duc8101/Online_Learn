@@ -3,7 +3,6 @@ package online_learn.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.NonNull;
 import online_learn.composite_key.EnrollCourseId;
 
 import java.io.Serializable;
@@ -18,7 +17,7 @@ public class EnrollCourse implements Serializable {
     public EnrollCourse() {
     }
 
-    public EnrollCourse(@NonNull Course course, @NonNull User student) {
+    public EnrollCourse(Course course, User student) {
         this.course = course;
         this.student = student;
         this.enrollCourseId = new EnrollCourseId(course.getCourseId(), student.getUserId());
@@ -30,16 +29,13 @@ public class EnrollCourse implements Serializable {
     @ManyToOne
     @MapsId("courseId")
     @JoinColumn(name = "course_id", nullable = false)
-    @NonNull
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     @MapsId("studentId")
-    @NonNull
     private User student;
 
     @Column(name = "created_at", nullable = false)
-    @NonNull
     private LocalDateTime createdAt;
 }

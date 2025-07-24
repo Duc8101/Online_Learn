@@ -2,7 +2,6 @@ package online_learn.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ public class Role {
     private int roleId;
 
     @Column(name = "role_name", nullable = false)
-    @NonNull
     private String roleName;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)

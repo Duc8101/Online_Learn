@@ -3,8 +3,6 @@ package online_learn.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.NonNull;
-import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -20,7 +18,7 @@ public class Course implements Serializable {
     public Course() {
     }
 
-    public Course(int courseId, @NonNull String courseName, @NonNull String image, @NonNull Category category, @NonNull User creator, @Nullable String description, @NonNull LocalDateTime createdAt, @NonNull LocalDateTime updatedAt, boolean isDeleted) {
+    public Course(int courseId, String courseName, String image, Category category, User creator, String description, LocalDateTime createdAt, LocalDateTime updatedAt, boolean isDeleted) {
         this.courseId = courseId;
         this.courseName = courseName;
         this.image = image;
@@ -38,33 +36,26 @@ public class Course implements Serializable {
     private int courseId;
 
     @Column(name = "course_name", nullable = false)
-    @NonNull
     private String courseName;
 
     @Column(name = "image", nullable = false)
-    @NonNull
     private String image;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    @NonNull
     private Category category;
 
     @ManyToOne
     @JoinColumn(name = "creator_id", nullable = false)
-    @NonNull
     private User creator;
 
     @Column(name = "description")
-    @Nullable
     private String description;
 
     @Column(name = "created_at", nullable = false)
-    @NonNull
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    @NonNull
     private LocalDateTime updatedAt;
 
     @Column(name = "is_deleted", nullable = false)

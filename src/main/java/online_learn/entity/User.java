@@ -2,10 +2,8 @@ package online_learn.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import online_learn.enums.Genders;
-import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -24,35 +22,27 @@ public class User implements Serializable {
     private int userId;
 
     @Column(name = "full_name", nullable = false)
-    @NonNull
     private String fullName;
 
     @Column(name = "phone")
-    @Nullable
     private String phone;
 
     @Column(name = "image", nullable = false)
-    @NonNull
     private String image;
 
     @Column(name = "address")
-    @Nullable
     private String address;
 
     @Column(name = "email", nullable = false)
-    @NonNull
     private String email;
 
     @Column(name = "gender", nullable = false)
-    @NonNull
     private Genders gender;
 
     @Column(name = "username", nullable = false)
-    @NonNull
     private String username;
 
     @Column(name = "password", nullable = false)
-    @NonNull
     private String password;
 
     @ManyToOne
@@ -63,15 +53,12 @@ public class User implements Serializable {
     private int failedLoginAttempts;
 
     @Column(name = "lockout_end_time")
-    @Nullable
     private LocalDateTime lockoutEndTime;
 
     @Column(name = "created_at", nullable = false)
-    @NonNull
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    @NonNull
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
