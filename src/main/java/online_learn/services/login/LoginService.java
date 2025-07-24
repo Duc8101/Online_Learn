@@ -124,7 +124,6 @@ public class LoginService extends BaseService implements ILoginService {
                 // if failed enough 5 times
                 if (user.getLockoutEndTime() == null) {
                     user.setLockoutEndTime(LocalDateTime.now().plusMinutes(15));
-                    ;
                     userRepository.save(user);
                 }
                 lockoutEndTime = user.getLockoutEndTime();
@@ -155,6 +154,7 @@ public class LoginService extends BaseService implements ILoginService {
             session.setAttribute("user", userProfileInfoDTO);
 
             Cookie cookie = new Cookie("userId", String.valueOf(user.getUserId()));
+            cookie.setMaxAge(60 * 60 * 24);
             response.addCookie(cookie);
             return new ResponseBase(StatusCodeConst.OK, data);
         } catch (Exception e) {

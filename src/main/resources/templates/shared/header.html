@@ -71,7 +71,7 @@
             <div class="dropdown-menu fade-down m-0">
                 <a href="/Profile" class="dropdown-item">Profile</a>
                 <a href="/MyCourse"
-                   th:class="${'dropdown-item '} + ${session.user == null || session.user.roleId == 1 ? '' : 'd-none'}">My
+                   th:class="${'dropdown-item '} + ${session.user == null || session.user.roleId == 3 ? '' : 'd-none'}">My
                     Course</a>
                 <a href="/ManagerCourse"
                    th:class="${'dropdown-item '} + ${session.user != null && session.user.roleId == 2 ? '' : 'd-none'}">My
