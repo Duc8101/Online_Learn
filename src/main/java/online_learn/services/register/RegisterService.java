@@ -33,9 +33,9 @@ public class RegisterService extends BaseService implements IRegisterService {
         Map<String, Object> data = new HashMap<>();
         try {
             setValueForHeaderFooter(data, true, false, false, true);
-            data.put("male", Genders.MALE);
-            data.put("female", Genders.FEMALE);
-            data.put("other", Genders.OTHER);
+            data.put("male", Genders.Male);
+            data.put("female", Genders.Female);
+            data.put("other", Genders.Other);
             return new ResponseBase(StatusCodeConst.OK, data);
         } catch (Exception e) {
             data.clear();
@@ -51,9 +51,9 @@ public class RegisterService extends BaseService implements IRegisterService {
         Map<String, Object> data = new HashMap<>();
         try {
             setValueForHeaderFooter(data, true, false, false, true);
-            data.put("male", Genders.MALE);
-            data.put("female", Genders.FEMALE);
-            data.put("other", Genders.OTHER);
+            data.put("male", Genders.Male);
+            data.put("female", Genders.Female);
+            data.put("other", Genders.Other);
 
             if (userRepository.findAll().stream().anyMatch(u -> u.getUsername().equalsIgnoreCase(DTO.getUsername())
                     || u.getEmail().equalsIgnoreCase(DTO.getEmail().trim()))) {
