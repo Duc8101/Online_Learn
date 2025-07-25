@@ -10,4 +10,13 @@ public class ParseUtil {
             return false;
         }
     }
+
+    public static boolean booleanTryParse(String input) {
+        try {
+            Boolean.parseBoolean(input);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

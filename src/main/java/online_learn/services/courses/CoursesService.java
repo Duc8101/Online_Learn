@@ -32,30 +32,30 @@ public class CoursesService extends BaseService implements ICoursesService {
         this.enrollCourseRepository = enrollCourseRepository;
     }
 
-    private Stream<Course> getStream(Integer categoryId) {
+    private Stream<Course> getStream(String categoryId) {
         Stream<Course> stream = courseRepository.findAll().stream().filter(c -> !c.isDeleted());
         if (categoryId != null) {
-            stream = stream.filter(c -> c.getCategory().getCategoryId() == categoryId);
+            stream = stream.filter(c -> c.getCategory().getCategoryId() == Integer.parseInt(categoryId));
         }
         return stream;
     }
 
     @Override
-    public ResponseBase list(Integer categoryId, Boolean orderBy, Integer page, Integer studentId) {
+    public ResponseBase list(String categoryId, String orderBy, String page, Integer studentId) {
         Map<String, Object> data = new HashMap<>();
         try {
-            int currentPage = page == null ? 1 : page;
+            int currentPage = page == null ? 1 : Integer.parseInt(page);
             // get categories
             List<CategoryListDTO> categories = categoryRepository.findAll().stream().map(c -> new CategoryListDTO(c.getCategoryId(), c.getCategoryName()))
                     .toList();
 
             // ------------------------- get courses ----------------------------
             Comparator<Course> comparator;
-            // if sort by updated_at
+            // if sort by updated_at desc
             if (orderBy == null) {
                 comparator = Comparator.comparing(Course::getUpdatedAt).reversed();
                 // if sort by course name asc
-            } else if (orderBy) {
+            } else if (Boolean.parseBoolean(orderBy)) {
                 comparator = Comparator.comparing(Course::getCourseName);
             } else {
                 comparator = Comparator.comparing(Course::getCourseName).reversed();

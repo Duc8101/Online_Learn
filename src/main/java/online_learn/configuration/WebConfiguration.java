@@ -1,6 +1,7 @@
 package online_learn.configuration;
 
 import online_learn.interceptors.AuthenticationInterceptor;
+import online_learn.interceptors.StudentInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -9,14 +10,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfiguration implements WebMvcConfigurer {
 
     private final AuthenticationInterceptor authenticationInterceptor;
+    private final StudentInterceptor studentInterceptor;
 
-    public WebConfiguration(AuthenticationInterceptor authenticationInterceptor) {
+    public WebConfiguration(AuthenticationInterceptor authenticationInterceptor,  StudentInterceptor studentInterceptor) {
         this.authenticationInterceptor = authenticationInterceptor;
+        this.studentInterceptor = studentInterceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor)
                 .addPathPatterns("/Profile", "/ChangePassword");
+        registry.addInterceptor(studentInterceptor)
+                .addPathPatterns("/MyCourse");
     }
 }

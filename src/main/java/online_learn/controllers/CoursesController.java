@@ -24,7 +24,12 @@ public class CoursesController {
     }
 
     @GetMapping("")
-    public ModelAndView list(Integer categoryId, Boolean orderBy, Integer page, HttpSession session) {
+    public ModelAndView list(String categoryId, String orderBy, String page, HttpSession session) {
+        if ((categoryId != null && !ParseUtil.intTryParse(categoryId)) || (page != null && !ParseUtil.intTryParse(page))
+                || (orderBy != null && !ParseUtil.booleanTryParse(orderBy))) {
+            return new ModelAndView("redirect:/Home");
+        }
+
         UserProfileInfoDTO user = (UserProfileInfoDTO) session.getAttribute("user");
         ResponseBase responseBase;
         if (user == null || user.getRoleId() != Roles.STUDENT.getValue()) {
