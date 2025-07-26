@@ -26,7 +26,7 @@ public class WebConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(authenticationInterceptor)
                 .addPathPatterns("/Profile", "/ChangePassword");
         registry.addInterceptor(studentInterceptor)
-                .addPathPatterns("/MyCourse");
+                .addPathPatterns("/MyCourse", "/Courses/LearnCourse", "/Courses/LearnCourse/*");
         registry.addInterceptor(guestOrStudentInterceptor)
                 .addPathPatterns("/Courses/EnrollCourse", "/Courses/EnrollCourse/*");
     }

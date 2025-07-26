@@ -5,15 +5,16 @@ import online_learn.constants.PageSizeConst;
 import online_learn.constants.StatusCodeConst;
 import online_learn.dtos.course_dto.CourseDetailDTO;
 import online_learn.dtos.lesson_dto.LessonListForCourseDetailOrViewLessonDTO;
+import online_learn.dtos.lesson_dto.LessonListForLearnCourseDTO;
+import online_learn.dtos.pdf_dto.PdfListDTO;
 import online_learn.dtos.user_dto.UserProfileInfoDTO;
+import online_learn.dtos.video_dto.VideoListDTO;
 import online_learn.entity.Course;
 import online_learn.entity.EnrollCourse;
 import online_learn.entity.User;
+import online_learn.entity.Video;
 import online_learn.paging.Pagination;
-import online_learn.repositories.ICategoryRepository;
-import online_learn.repositories.ICourseRepository;
-import online_learn.repositories.IEnrollCourseRepository;
-import online_learn.repositories.IUserRepository;
+import online_learn.repositories.*;
 import online_learn.responses.ResponseBase;
 import online_learn.services.base.BaseService;
 import online_learn.dtos.category_dto.CategoryListDTO;
@@ -32,13 +33,17 @@ public class CoursesService extends BaseService implements ICoursesService {
     private final ICourseRepository courseRepository;
     private final IEnrollCourseRepository enrollCourseRepository;
     private final IUserRepository userRepository;
+    private final IVideoRepository videoRepository;
+    private final IPdfRepository pdfRepository;
 
     public CoursesService(ICategoryRepository categoryRepository, ICourseRepository courseRepository, IEnrollCourseRepository enrollCourseRepository
-            , IUserRepository userRepository) {
+            , IUserRepository userRepository, IVideoRepository videoRepository, IPdfRepository pdfRepository) {
         this.categoryRepository = categoryRepository;
         this.courseRepository = courseRepository;
         this.enrollCourseRepository = enrollCourseRepository;
         this.userRepository = userRepository;
+        this.videoRepository = videoRepository;
+        this.pdfRepository = pdfRepository;
     }
 
     private Stream<Course> getStream(String categoryId) {
@@ -218,6 +223,72 @@ public class CoursesService extends BaseService implements ICoursesService {
                 enrollCourseRepository.save(enrollCourse);
             }
 
+            return new ResponseBase(StatusCodeConst.OK, data);
+        } catch (Exception e) {
+            data.clear();
+            data.put("error", e.getMessage() + " " + e);
+            data.put("code", StatusCodeConst.INTERNAL_SERVER_ERROR);
+            setValueForHeaderFooter(data, true, true, true, true);
+            return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
+        }
+    }
+
+    @Override
+    public ResponseBase learnCourse(int courseId, String video, String name, String pdf, Integer lessonId, Integer videoId, Integer pdfId, HttpSession session) {
+        Map<String, Object> data = new HashMap<>();
+        try {
+            Course course = courseRepository.findById(courseId).orElse(null);
+            if (course == null) {
+                setValueForHeaderFooter(data, true, true, true, true);
+                data.put("error", String.format("Course with id = %d does not exist", courseId));
+                data.put("code", StatusCodeConst.NOT_FOUND);
+                return new ResponseBase(StatusCodeConst.NOT_FOUND, data);
+            }
+
+            UserProfileInfoDTO user = (UserProfileInfoDTO) session.getAttribute("user");
+
+            // if student not enroll course
+            if (enrollCourseRepository.findAll().stream().noneMatch(ec -> ec.getCourse().getCourseId() == courseId && ec.getStudent().getUserId() == user.getUserId())) {
+                return new ResponseBase(StatusCodeConst.BAD_REQUEST, data);
+            }
+
+            setValueForHeaderFooter(data, false, true, false, false);
+            List<LessonListForLearnCourseDTO> lessons = course.getLessons().stream().map(l -> new LessonListForLearnCourseDTO(l.getLessonId()
+                    , l.getLessonName(), l.getCourse().getCourseId(), !l.getQuizzes().isEmpty())).toList();
+
+            for (LessonListForLearnCourseDTO lesson : lessons) {
+                List<VideoListDTO> videoDTOs = videoRepository.findAll().stream().filter(v -> v.getLesson()
+                        .getLessonId() == lesson.getLessonId()).map(v -> new VideoListDTO(v.getVideoId()
+                        , v.getVideoName(), v.getFileVideo(), v.getLesson().getLessonId())).toList();
+
+                List<PdfListDTO> pdfDTOs = pdfRepository.findAll().stream().filter(p -> p.getLesson()
+                        .getLessonId() == lesson.getLessonId()).map(p -> new PdfListDTO(p.getPdfId()
+                        , p.getPdfName(), p.getFilePdf(), p.getLesson().getLessonId())).toList();
+
+                lesson.setVideoDTOs(videoDTOs);
+                lesson.setPdfDTOs(pdfDTOs);
+            }
+
+            // if start to learn course
+            if (video == null && pdf == null) {
+                Video vid = videoRepository.findAll().stream().filter(v -> v.getLesson().getCourse().getCourseId() == courseId)
+                        .findFirst().orElse(null);
+                if (vid != null) {
+                    video = vid.getFileVideo();
+                    name = vid.getVideoName();
+                    videoId = vid.getVideoId();
+                    lessonId = vid.getLesson().getLessonId();
+                }
+            }
+
+            data.put("lessons", lessons);
+            data.put("pdf", pdf == null ? "" : pdf);
+            data.put("video", video == null ? "" : video);
+            data.put("name", name == null ? "" : name);
+            data.put("lessonId", lessonId == null ? 0 : lessonId);
+            data.put("courseId", courseId);
+            data.put("videoId", videoId);
+            data.put("pdfId", pdfId);
             return new ResponseBase(StatusCodeConst.OK, data);
         } catch (Exception e) {
             data.clear();
