@@ -61,7 +61,24 @@ public class CoursesController {
             }
             return new ModelAndView("shared/error", responseBase.getData());
         }
+        return new ModelAndView("redirect:/Courses");
+    }
 
+    @GetMapping({"/EnrollCourse", "/EnrollCourse/{courseId}"})
+    public ModelAndView enrollCourse(@PathVariable(required = false, value = "courseId") String CourseId, HttpSession session) {
+        UserProfileInfoDTO user = (UserProfileInfoDTO) session.getAttribute("user");
+        if (user == null) {
+            return new ModelAndView("redirect:/Login");
+        }
+
+        if (ParseUtil.intTryParse(CourseId)) {
+            int courseId = Integer.parseInt(CourseId);
+            ResponseBase responseBase = service.enrollCourse(courseId, user.getUserId());
+            if (responseBase.getCode() == StatusCodeConst.OK) {
+                return new ModelAndView("redirect:/MyCourse");
+            }
+            return new ModelAndView("shared/error", responseBase.getData());
+        }
         return new ModelAndView("redirect:/Courses");
     }
 }

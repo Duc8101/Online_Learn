@@ -9,5 +9,6 @@ import java.util.Map;
 public interface IProfileService {
 
     Map<String, Object> index();
+
     ResponseBase index(ProfileFormDTO DTO, HttpSession session);
 }

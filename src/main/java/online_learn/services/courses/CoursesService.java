@@ -1,20 +1,26 @@
 package online_learn.services.courses;
 
+import jakarta.servlet.http.HttpSession;
 import online_learn.constants.PageSizeConst;
 import online_learn.constants.StatusCodeConst;
 import online_learn.dtos.course_dto.CourseDetailDTO;
 import online_learn.dtos.lesson_dto.LessonListForCourseDetailOrViewLessonDTO;
+import online_learn.dtos.user_dto.UserProfileInfoDTO;
 import online_learn.entity.Course;
+import online_learn.entity.EnrollCourse;
+import online_learn.entity.User;
 import online_learn.paging.Pagination;
 import online_learn.repositories.ICategoryRepository;
 import online_learn.repositories.ICourseRepository;
 import online_learn.repositories.IEnrollCourseRepository;
+import online_learn.repositories.IUserRepository;
 import online_learn.responses.ResponseBase;
 import online_learn.services.base.BaseService;
 import online_learn.dtos.category_dto.CategoryListDTO;
 import online_learn.dtos.course_dto.GetAllCoursesDTO;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -25,11 +31,14 @@ public class CoursesService extends BaseService implements ICoursesService {
     private final ICategoryRepository categoryRepository;
     private final ICourseRepository courseRepository;
     private final IEnrollCourseRepository enrollCourseRepository;
+    private final IUserRepository userRepository;
 
-    public CoursesService(ICategoryRepository categoryRepository, ICourseRepository courseRepository, IEnrollCourseRepository enrollCourseRepository) {
+    public CoursesService(ICategoryRepository categoryRepository, ICourseRepository courseRepository, IEnrollCourseRepository enrollCourseRepository
+            , IUserRepository userRepository) {
         this.categoryRepository = categoryRepository;
         this.courseRepository = courseRepository;
         this.enrollCourseRepository = enrollCourseRepository;
+        this.userRepository = userRepository;
     }
 
     private Stream<Course> getStream(String categoryId) {
@@ -173,6 +182,42 @@ public class CoursesService extends BaseService implements ICoursesService {
             }
 
             data.put("course", courseDetailDTO);
+            return new ResponseBase(StatusCodeConst.OK, data);
+        } catch (Exception e) {
+            data.clear();
+            data.put("error", e.getMessage() + " " + e);
+            data.put("code", StatusCodeConst.INTERNAL_SERVER_ERROR);
+            setValueForHeaderFooter(data, true, true, true, true);
+            return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
+        }
+    }
+
+    @Override
+    public ResponseBase enrollCourse(int courseId, int studentId) {
+        Map<String, Object> data = new HashMap<>();
+        try {
+            setValueForHeaderFooter(data, true, true, true, true);
+            Course course = courseRepository.findById(courseId).orElse(null);
+            if (course == null) {
+                data.put("error", String.format("Course with id = %d does not exist", courseId));
+                data.put("code", StatusCodeConst.NOT_FOUND);
+                return new ResponseBase(StatusCodeConst.NOT_FOUND, data);
+            }
+
+            User student = userRepository.findById(studentId).orElse(null);
+            if (student == null) {
+                data.put("error", String.format("User with id = %d does not exist", studentId));
+                data.put("code", StatusCodeConst.NOT_FOUND);
+                return new ResponseBase(StatusCodeConst.NOT_FOUND, data);
+            }
+
+            // if student not enroll course
+            if (enrollCourseRepository.findAll().stream().noneMatch(ec -> ec.getCourse().getCourseId() == course.getCourseId() && ec.getStudent().getUserId() == studentId)) {
+                EnrollCourse enrollCourse = new EnrollCourse(course, student);
+                enrollCourse.setCreatedAt(LocalDateTime.now());
+                enrollCourseRepository.save(enrollCourse);
+            }
+
             return new ResponseBase(StatusCodeConst.OK, data);
         } catch (Exception e) {
             data.clear();

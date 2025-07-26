@@ -7,5 +7,6 @@ import java.util.Map;
 public interface IForgotPasswordService {
 
     Map<String, Object> index();
+
     ResponseBase index(String email);
 }

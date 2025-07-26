@@ -9,5 +9,6 @@ import java.util.Map;
 public interface IChangePasswordService {
 
     Map<String, Object> index();
+
     ResponseBase index(ChangePasswordDTO DTO, HttpSession session);
 }

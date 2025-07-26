@@ -6,5 +6,6 @@ import online_learn.responses.ResponseBase;
 public interface IRegisterService {
 
     ResponseBase index();
+
     ResponseBase index(RegisterDTO DTO);
 }
