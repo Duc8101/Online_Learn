@@ -38,7 +38,7 @@ public class TakeQuizService extends BaseService implements ITakeQuizService {
             }
 
             List<QuizListDTO> quizzes = lesson.getQuizzes().stream().map(q -> new QuizListDTO(q.getQuizId()
-                    , q.getQuizName(), q.getLesson().getLessonId())).toList();
+                    , q.getQuizName(), q.getLesson().getLessonId(), !q.getQuestions().isEmpty())).toList();
             data.put("quizzes", quizzes);
             return new ResponseBase(StatusCodeConst.OK, data);
         } catch (Exception e) {

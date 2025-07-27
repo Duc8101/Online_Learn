@@ -3,7 +3,9 @@ package online_learn.converters;
 import lombok.NonNull;
 import online_learn.enums.Genders;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GenderConverter implements Converter<Integer, Genders> {
 
     @Override

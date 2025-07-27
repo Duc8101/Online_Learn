@@ -11,5 +11,5 @@ import java.util.List;
 @Setter
 public class CourseDetailDTO extends GetAllCoursesDTO {
 
-    private List<LessonListForCourseDetailOrViewLessonDTO> lessonListDTOs =  new ArrayList<>();
+    private List<LessonListForCourseDetailOrViewLessonDTO> lessonListDTOs = new ArrayList<>();
 }

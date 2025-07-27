@@ -4,8 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import online_learn.constants.StatusCodeConst;
+import online_learn.constants.UserConst;
 import online_learn.dtos.user_dto.UserProfileInfoDTO;
-import online_learn.enums.Roles;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -22,7 +22,7 @@ public class StudentInterceptor implements HandlerInterceptor {
         }
 
         // if login not as student
-        if (user.getRoleId() != Roles.STUDENT.getValue()) {
+        if (user.getRoleId() != UserConst.ROLE_STUDENT) {
             request.getRequestDispatcher(String.format("/Error/%d", StatusCodeConst.FORBIDDEN)).forward(request, response);
             return false;
         }

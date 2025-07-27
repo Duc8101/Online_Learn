@@ -1,11 +1,11 @@
 package online_learn.services.register;
 
 import online_learn.constants.StatusCodeConst;
+import online_learn.constants.UserConst;
 import online_learn.dtos.user_dto.RegisterDTO;
 import online_learn.entity.Role;
 import online_learn.entity.User;
 import online_learn.enums.Genders;
-import online_learn.enums.Roles;
 import online_learn.repositories.IRoleRepository;
 import online_learn.repositories.IUserRepository;
 import online_learn.responses.ResponseBase;
@@ -74,7 +74,7 @@ public class RegisterService extends BaseService implements IRegisterService {
             user.setAddress(DTO.getAddress() == null || DTO.getAddress().trim().isEmpty() ? null : DTO.getAddress().trim());
             user.setImage("https://i.pinimg.com/564x/31/ec/2c/31ec2ce212492e600b8de27f38846ed7.jpg");
 
-            Role role = roleRepository.findById(Roles.STUDENT.getValue()).orElseThrow(() -> new RuntimeException("Role not Found"));
+            Role role = roleRepository.findById(UserConst.ROLE_STUDENT).orElseThrow(() -> new RuntimeException("Role not Found"));
 
             String body = UserUtil.bodyEmailForRegister(newPw);
             UserUtil.sendEmail("Welcome to Online Learn", body, DTO.getEmail().trim());

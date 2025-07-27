@@ -8,10 +8,11 @@ import lombok.Setter;
 @Setter
 public class QuizListDTO {
 
-    public QuizListDTO(int quizId, @NonNull String quizName, int lessonId) {
+    public QuizListDTO(int quizId, @NonNull String quizName, int lessonId, boolean hasQuestion) {
         this.quizId = quizId;
         this.quizName = quizName;
         this.lessonId = lessonId;
+        this.hasQuestion = hasQuestion;
     }
 
     private int quizId;
@@ -20,4 +21,5 @@ public class QuizListDTO {
     private String quizName;
 
     private int lessonId;
+    private boolean hasQuestion;
 }

@@ -2,7 +2,7 @@ package online_learn.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import online_learn.constants.StatusCodeConst;
-import online_learn.enums.Roles;
+import online_learn.constants.UserConst;
 import online_learn.responses.ResponseBase;
 import online_learn.services.courses.ICoursesService;
 import online_learn.dtos.user_dto.UserProfileInfoDTO;
@@ -32,7 +32,7 @@ public class CoursesController {
 
         UserProfileInfoDTO user = (UserProfileInfoDTO) session.getAttribute("user");
         ResponseBase responseBase;
-        if (user == null || user.getRoleId() != Roles.STUDENT.getValue()) {
+        if (user == null || user.getRoleId() != UserConst.ROLE_STUDENT) {
             responseBase = service.list(categoryId, orderBy, page, null);
         } else {
             responseBase = service.list(categoryId, orderBy, page, user.getUserId());
@@ -50,7 +50,7 @@ public class CoursesController {
             int courseId = Integer.parseInt(CourseId);
             UserProfileInfoDTO user = (UserProfileInfoDTO) session.getAttribute("user");
             ResponseBase responseBase;
-            if (user == null || user.getRoleId() != Roles.STUDENT.getValue()) {
+            if (user == null || user.getRoleId() != UserConst.ROLE_STUDENT) {
                 responseBase = service.detail(courseId, null);
             } else {
                 responseBase = service.detail(courseId, user.getUserId());

@@ -1,7 +1,7 @@
 package online_learn.services.home;
 
 import online_learn.constants.StatusCodeConst;
-import online_learn.enums.Roles;
+import online_learn.constants.UserConst;
 import online_learn.repositories.IUserRepository;
 import online_learn.responses.ResponseBase;
 import online_learn.services.base.BaseService;
@@ -26,7 +26,7 @@ public class HomeService extends BaseService implements IHomeService {
         Map<String, Object> data = new HashMap<>();
         try {
             List<UserInfoForHomePageDTO> users = userRepository.findAll().stream()
-                    .filter(u -> u.getRole().getRoleId() == Roles.TEACHER.getValue())
+                    .filter(u -> u.getRole().getRoleId() == UserConst.ROLE_TEACHER)
                     .limit(4).map(u -> new UserInfoForHomePageDTO(u.getUserId(), u.getFullName(), u.getImage()))
                     .toList();
 
