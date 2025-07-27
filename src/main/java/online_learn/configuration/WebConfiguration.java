@@ -15,14 +15,12 @@ public class WebConfiguration implements WebMvcConfigurer {
     private final AuthenticationInterceptor authenticationInterceptor;
     private final StudentInterceptor studentInterceptor;
     private final GuestOrStudentInterceptor guestOrStudentInterceptor;
-    private final AnswerConverter answerConverter;
 
     public WebConfiguration(AuthenticationInterceptor authenticationInterceptor, StudentInterceptor studentInterceptor
-            , GuestOrStudentInterceptor guestOrStudentInterceptor, AnswerConverter answerConverter) {
+            , GuestOrStudentInterceptor guestOrStudentInterceptor) {
         this.authenticationInterceptor = authenticationInterceptor;
         this.studentInterceptor = studentInterceptor;
         this.guestOrStudentInterceptor = guestOrStudentInterceptor;
-        this.answerConverter = answerConverter;
     }
 
     @Override
@@ -33,10 +31,5 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/MyCourse", "/Courses/LearnCourse", "/Courses/LearnCourse/*", "/TakeQuiz", "/StartQuiz");
         registry.addInterceptor(guestOrStudentInterceptor)
                 .addPathPatterns("/Courses/EnrollCourse", "/Courses/EnrollCourse/*");
-    }
-
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(answerConverter);
     }
 }

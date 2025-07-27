@@ -3,6 +3,7 @@ package online_learn.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import online_learn.converters.GenderConverter;
 import online_learn.enums.Genders;
 
 import java.io.Serializable;
@@ -37,6 +38,7 @@ public class User implements Serializable {
     private String email;
 
     @Column(name = "gender", nullable = false)
+    @Convert(converter = GenderConverter.class)
     private Genders gender;
 
     @Column(name = "username", nullable = false)

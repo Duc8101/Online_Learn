@@ -1,17 +1,25 @@
 package online_learn.converters;
 
-import lombok.NonNull;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import online_learn.enums.Answers;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
-@Component
-public class AnswerConverter implements Converter<Integer, Answers> {
+@Converter
+public class AnswerConverter implements AttributeConverter<Answers, Integer> {
 
     @Override
-    public Answers convert(@NonNull Integer source) {
+    public Integer convertToDatabaseColumn(Answers answers) {
+        return answers == null ? null : answers.getValue();
+    }
+
+    @Override
+    public Answers convertToEntityAttribute(Integer integer) {
+        if (integer == null) {
+            return null;
+        }
+
         for (Answers answer : Answers.values()) {
-            if (answer.getValue() == source) {
+            if (answer.getValue() == integer) {
                 return answer;
             }
         }

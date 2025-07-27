@@ -3,6 +3,7 @@ package online_learn.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import online_learn.converters.AnswerConverter;
 import online_learn.enums.Answers;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class Question {
     private String answer4;
 
     @Column(name = "answer_correct", nullable = false)
+    @Convert(converter = AnswerConverter.class)
     private Answers answerCorrect;
 
     @Column(name = "created_at", nullable = false)

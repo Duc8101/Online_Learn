@@ -1,7 +1,9 @@
 package online_learn.dtos.start_quiz_dto;
 
+import jakarta.persistence.Convert;
 import lombok.Getter;
 import lombok.Setter;
+import online_learn.converters.AnswerConverter;
 import online_learn.enums.Answers;
 import org.springframework.lang.Nullable;
 
@@ -9,9 +11,10 @@ import org.springframework.lang.Nullable;
 @Setter
 public class StartQuizCreateDTO {
 
-    private int questionId ;
-    private int quizId ;
+    private int questionId;
+    private int quizId;
 
     @Nullable
-    private Answers answer ;
+    @Convert(converter = AnswerConverter.class)
+    private Answers answer;
 }

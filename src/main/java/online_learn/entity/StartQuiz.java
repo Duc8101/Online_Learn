@@ -3,6 +3,7 @@ package online_learn.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import online_learn.converters.AnswerConverter;
 import online_learn.enums.Answers;
 
 @Entity
@@ -25,5 +26,6 @@ public class StartQuiz {
     private Question question;
 
     @Column(name = "answer")
+    @Convert(converter = AnswerConverter.class)
     private Answers answer;
 }
