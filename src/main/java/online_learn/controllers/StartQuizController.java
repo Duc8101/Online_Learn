@@ -63,7 +63,7 @@ public class StartQuizController {
 
         ResponseBase responseBase = service.finish(DTO, session);
         if (responseBase.getCode() == StatusCodeConst.OK) {
-            return new ModelAndView(String.format("redirect:/Result?quizId=%d", DTO.getQuizId()), responseBase.getData());
+            return new ModelAndView(String.format("redirect:/Result?quizId=%d", DTO.getQuizId()));
         }
         return new ModelAndView("shared/error", responseBase.getData());
     }
