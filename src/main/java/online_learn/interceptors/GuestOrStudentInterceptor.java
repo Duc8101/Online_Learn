@@ -17,7 +17,7 @@ public class GuestOrStudentInterceptor implements HandlerInterceptor {
         UserProfileInfoDTO user = (UserProfileInfoDTO) request.getSession().getAttribute("user");
         // login as admin or teacher
         if (!(user == null || user.getRoleId() == UserConst.ROLE_STUDENT)) {
-            request.getRequestDispatcher(String.format("/Error/%d", StatusCodeConst.FORBIDDEN)).forward(request, response);
+            request.getRequestDispatcher(String.format("/error/%d", StatusCodeConst.FORBIDDEN)).forward(request, response);
             return false;
         }
         return true;

@@ -14,7 +14,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
         // if not login
         if (request.getSession().getAttribute("user") == null) {
-            request.getRequestDispatcher(String.format("/Error/%d", StatusCodeConst.UNAUTHORIZED)).forward(request, response);
+            request.getRequestDispatcher(String.format("/error/%d", StatusCodeConst.UNAUTHORIZED)).forward(request, response);
             return false;
         }
         return true;
