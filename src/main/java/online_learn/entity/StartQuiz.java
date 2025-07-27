@@ -6,6 +6,8 @@ import lombok.Setter;
 import online_learn.converters.AnswerConverter;
 import online_learn.enums.Answers;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "start_quiz")
 @Getter
@@ -13,9 +15,9 @@ import online_learn.enums.Answers;
 public class StartQuiz {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "start_quiz_id", nullable = false)
-    private int startQuizId;
+    private UUID startQuizId;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
