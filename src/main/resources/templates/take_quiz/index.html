@@ -1,0 +1,36 @@
+<section th:replace="shared/header" xmlns:th="http://www.thymeleaf.org"></section>
+
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+<link href="/css/table.css" rel="stylesheet">
+
+<div class="card mb-6 pb-5">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        LIST QUIZ
+    </div>
+    <div class="card-body pb-5">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>Quiz</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="quiz, varStatus: ${quizzes}">
+                <td th:text="${varStatus.index + 1}"></td>
+                <td th:text="${quiz.quizName}"></td>
+                <td><a class="btn btn-info btn-lg" aria-disabled="true" role="button" th:href="${'/StartQuiz?quizId=' + quiz.quizId}">Start Quiz</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="/js/datatables-simple-demo.js"></script>
+
+<section th:replace="shared/footer" xmlns:th="http://www.thymeleaf.org"></section>
