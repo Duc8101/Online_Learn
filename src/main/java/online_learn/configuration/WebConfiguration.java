@@ -33,6 +33,6 @@ public class WebConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(guestOrStudentInterceptor)
                 .addPathPatterns("/Courses/EnrollCourse", "/Courses/EnrollCourse/*");
         registry.addInterceptor(teacherInterceptor)
-                .addPathPatterns("/ManagerCourse");
+                .addPathPatterns("/ManagerCourse", "/ManagerCourse/*");
     }
 }

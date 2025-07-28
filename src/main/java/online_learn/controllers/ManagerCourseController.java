@@ -32,4 +32,13 @@ public class ManagerCourseController {
         }
         return new ModelAndView("shared/error", responseBase.getData());
     }
+
+    @GetMapping("/Create")
+    public ModelAndView create() {
+        ResponseBase responseBase = service.create();
+        if (responseBase.getCode() == StatusCodeConst.OK) {
+            return new ModelAndView("manager_course/create", responseBase.getData());
+        }
+        return new ModelAndView("shared/error", responseBase.getData());
+    }
 }

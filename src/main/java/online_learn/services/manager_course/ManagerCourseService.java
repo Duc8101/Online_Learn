@@ -3,10 +3,12 @@ package online_learn.services.manager_course;
 import jakarta.servlet.http.HttpSession;
 import online_learn.constants.PageSizeConst;
 import online_learn.constants.StatusCodeConst;
+import online_learn.dtos.category_dto.CategoryListDTO;
 import online_learn.dtos.course_dto.GetStudentOrTeacherCoursesDTO;
 import online_learn.dtos.user_dto.UserProfileInfoDTO;
 import online_learn.entity.Course;
 import online_learn.paging.Pagination;
+import online_learn.repositories.ICategoryRepository;
 import online_learn.repositories.ICourseRepository;
 import online_learn.responses.ResponseBase;
 import online_learn.services.base.BaseService;
@@ -22,9 +24,11 @@ import java.util.stream.Stream;
 public class ManagerCourseService extends BaseService implements IManagerCourseService {
 
     private final ICourseRepository courseRepository;
+    private final ICategoryRepository categoryRepository;
 
-    public ManagerCourseService(ICourseRepository courseRepository) {
+    public ManagerCourseService(ICourseRepository courseRepository, ICategoryRepository categoryRepository) {
         this.courseRepository = courseRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     private Stream<Course> getStream(int teacherId) {
@@ -56,6 +60,25 @@ public class ManagerCourseService extends BaseService implements IManagerCourseS
             pagination.setLastUrl(String.format("/ManagerCourse?page=%d", pagination.getNumberPage()));
 
             data.put("pagination", pagination);
+            return new ResponseBase(StatusCodeConst.OK, data);
+        } catch (Exception e) {
+            data.clear();
+            data.put("error", e.getMessage() + " " + e);
+            data.put("code", StatusCodeConst.INTERNAL_SERVER_ERROR);
+            setValueForHeaderFooter(data, true, true, true, true);
+            return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
+        }
+    }
+
+    @Override
+    public ResponseBase create() {
+        Map<String, Object> data = new HashMap<>();
+        try {
+            setValueForHeaderFooter(data, true, true, true, true);
+            List<CategoryListDTO> categories = categoryRepository.findAll().stream().map(c -> new CategoryListDTO(c.getCategoryId(), c.getCategoryName()))
+                    .toList();
+
+            data.put("categories", categories);
             return new ResponseBase(StatusCodeConst.OK, data);
         } catch (Exception e) {
             data.clear();
