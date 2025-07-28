@@ -1,5 +1,6 @@
 package online_learn.interceptors;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -17,12 +18,14 @@ public class StudentInterceptor implements HandlerInterceptor {
         UserProfileInfoDTO user = (UserProfileInfoDTO) request.getSession().getAttribute("user");
         // if not login
         if (user == null) {
+            request.setAttribute(RequestDispatcher.ERROR_MESSAGE, "Authentication Failed");
             request.getRequestDispatcher(String.format("/error/%d", StatusCodeConst.UNAUTHORIZED)).forward(request, response);
             return false;
         }
 
         // if login not as student
         if (user.getRoleId() != UserConst.ROLE_STUDENT) {
+            request.setAttribute(RequestDispatcher.ERROR_MESSAGE, "You are not allowed to access");
             request.getRequestDispatcher(String.format("/error/%d", StatusCodeConst.FORBIDDEN)).forward(request, response);
             return false;
         }

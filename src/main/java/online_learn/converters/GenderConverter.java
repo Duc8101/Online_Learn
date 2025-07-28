@@ -4,9 +4,10 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import online_learn.enums.Genders;
 
+import java.util.Arrays;
+
 @Converter
 public class GenderConverter implements AttributeConverter<Genders, Integer> {
-
 
     @Override
     public Integer convertToDatabaseColumn(Genders genders) {
@@ -18,12 +19,6 @@ public class GenderConverter implements AttributeConverter<Genders, Integer> {
         if (integer == null) {
             return null;
         }
-
-        for (Genders gender : Genders.values()) {
-            if (gender.getValue() == integer) {
-                return gender;
-            }
-        }
-        return null;
+        return Arrays.stream(Genders.values()).filter(g -> g.getValue() == integer).findFirst().orElse(null);
     }
 }

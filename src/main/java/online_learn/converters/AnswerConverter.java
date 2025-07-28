@@ -4,6 +4,8 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import online_learn.enums.Answers;
 
+import java.util.Arrays;
+
 @Converter
 public class AnswerConverter implements AttributeConverter<Answers, Integer> {
 
@@ -17,12 +19,6 @@ public class AnswerConverter implements AttributeConverter<Answers, Integer> {
         if (integer == null) {
             return null;
         }
-
-        for (Answers answer : Answers.values()) {
-            if (answer.getValue() == integer) {
-                return answer;
-            }
-        }
-        return null;
+        return Arrays.stream(Answers.values()).filter(a -> a.getValue() == integer).findFirst().orElse(null);
     }
 }
