@@ -5,5 +5,5 @@ import online_learn.responses.ResponseBase;
 
 public interface IManagerCourseService {
 
-    ResponseBase list(String page, HttpSession session);
+    ResponseBase list(int page, HttpSession session);
 }
