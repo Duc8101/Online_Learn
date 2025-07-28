@@ -138,4 +138,9 @@ public class ManagerCourseService extends BaseService implements IManagerCourseS
             return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
         }
     }
+
+    @Override
+    public ResponseBase update(int courseId, HttpSession session) {
+        return null;
+    }
 }

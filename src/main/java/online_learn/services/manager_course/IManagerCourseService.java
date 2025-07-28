@@ -11,4 +11,6 @@ public interface IManagerCourseService {
     ResponseBase create();
 
     ResponseBase create(CourseCreateUpdateDTO DTO, HttpSession session);
+
+    ResponseBase update(int courseId, HttpSession session);
 }
