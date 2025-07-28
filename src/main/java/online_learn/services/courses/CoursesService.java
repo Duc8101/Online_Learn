@@ -111,10 +111,10 @@ public class CoursesService extends BaseService implements ICoursesService {
                     nextUrl = nextUrl + String.format("?page=%d", currentPage + 1);
                     lastUrl = lastUrl + String.format("?page=%d", pagination.getNumberPage());
                 } else {
-                    preUrl = preUrl + String.format("?categoryId=%d&page=%d", categoryId, currentPage - 1);
-                    nextUrl = nextUrl + String.format("?categoryId=%d&page=%d", categoryId, currentPage + 1);
-                    firstUrl = firstUrl + String.format("?categoryId=%d", categoryId);
-                    lastUrl = lastUrl + String.format("?categoryId=%d&page=%d", categoryId, pagination.getNumberPage());
+                    preUrl = preUrl + String.format("?categoryId=%d&page=%d", Integer.parseInt(categoryId), currentPage - 1);
+                    nextUrl = nextUrl + String.format("?categoryId=%d&page=%d", Integer.parseInt(categoryId), currentPage + 1);
+                    firstUrl = firstUrl + String.format("?categoryId=%d", Integer.parseInt(categoryId));
+                    lastUrl = lastUrl + String.format("?categoryId=%d&page=%d", Integer.parseInt(categoryId), pagination.getNumberPage());
                 }
             } else {
                 // if not choose category
@@ -124,10 +124,10 @@ public class CoursesService extends BaseService implements ICoursesService {
                     firstUrl = firstUrl + String.format("?orderBy=%b", orderBy);
                     lastUrl = lastUrl + String.format("?orderBy=%b&page=%d", orderBy, pagination.getNumberPage());
                 } else {
-                    preUrl = preUrl + String.format("?categoryId=%d&orderBy=%b&page=%d", categoryId, orderBy, currentPage - 1);
-                    nextUrl = nextUrl + String.format("?categoryId=%d&orderBy=%b&page=%d", categoryId, orderBy, currentPage + 1);
-                    firstUrl = firstUrl + String.format("?categoryId=%d&orderBy=%b", categoryId, orderBy);
-                    lastUrl = lastUrl + String.format("?categoryId=%d&orderBy=%b&page=%d", categoryId, orderBy, pagination.getNumberPage());
+                    preUrl = preUrl + String.format("?categoryId=%d&orderBy=%b&page=%d", Integer.parseInt(categoryId), orderBy, currentPage - 1);
+                    nextUrl = nextUrl + String.format("?categoryId=%d&orderBy=%b&page=%d", Integer.parseInt(categoryId), orderBy, currentPage + 1);
+                    firstUrl = firstUrl + String.format("?categoryId=%d&orderBy=%b", Integer.parseInt(categoryId), orderBy);
+                    lastUrl = lastUrl + String.format("?categoryId=%d&orderBy=%b&page=%d", Integer.parseInt(categoryId), orderBy, pagination.getNumberPage());
                 }
             }
 
@@ -140,7 +140,7 @@ public class CoursesService extends BaseService implements ICoursesService {
             data.put("pagination", pagination);
             data.put("categories", categories);
             data.put("orderBy", orderBy);
-            data.put("categoryId", categoryId);
+            data.put("categoryId", categoryId == null ? 0 : Integer.parseInt(categoryId));
             setValueForHeaderFooter(data, true, true, true, true);
             return new ResponseBase(StatusCodeConst.OK, data);
         } catch (Exception e) {

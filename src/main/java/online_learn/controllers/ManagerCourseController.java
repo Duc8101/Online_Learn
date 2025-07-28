@@ -2,11 +2,13 @@ package online_learn.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import online_learn.constants.StatusCodeConst;
+import online_learn.dtos.course_dto.CourseCreateUpdateDTO;
 import online_learn.responses.ResponseBase;
 import online_learn.services.manager_course.IManagerCourseService;
 import online_learn.utils.ParseUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,6 +39,15 @@ public class ManagerCourseController {
     public ModelAndView create() {
         ResponseBase responseBase = service.create();
         if (responseBase.getCode() == StatusCodeConst.OK) {
+            return new ModelAndView("manager_course/create", responseBase.getData());
+        }
+        return new ModelAndView("shared/error", responseBase.getData());
+    }
+
+    @PostMapping("/Create")
+    public ModelAndView create(CourseCreateUpdateDTO DTO, HttpSession session) {
+        ResponseBase responseBase = service.create(DTO, session);
+        if (responseBase.getCode() == StatusCodeConst.OK ||  responseBase.getCode() == StatusCodeConst.BAD_REQUEST) {
             return new ModelAndView("manager_course/create", responseBase.getData());
         }
         return new ModelAndView("shared/error", responseBase.getData());

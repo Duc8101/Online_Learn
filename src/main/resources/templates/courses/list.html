@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-2 border">
                 <div class="list-group mt-2">
-                    <a th:class="${'py-3 list-group-item list-group-item-action '} + ${categoryId == null ? 'active' : ''}"
+                    <a th:class="${'py-3 list-group-item list-group-item-action '} + ${categoryId == 0 ? 'active' : ''}"
                        href="/Courses">ALL</a>
                     <a th:each="category: ${categories}"
                        th:class="${'py-3 list-group-item list-group-item-action '} + ${category.categoryId == categoryId ? 'active' : ''}"
@@ -20,7 +20,7 @@
 
             <div class="border col-10">
                 <form action="/Courses" class=" my-3 wow fadeInDown row fs-5 fw-bolder" data-wow-delay="0.2s">
-                    <input th:if="${categoryId != null}" type="hidden" name="categoryId" th:value="${categoryId}">
+                    <input th:if="${categoryId != 0}" type="hidden" name="categoryId" th:value="${categoryId}">
                     <div class="border col-2 text-center py-2 ms-2 fs-5 fw-bolder">Sort By :</div>
                     <div class="border col-2 text-center py-2 ms-2 fs-5 fw-bolder">Course Name</div>
 

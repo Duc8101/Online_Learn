@@ -4,16 +4,21 @@ import jakarta.servlet.http.HttpSession;
 import online_learn.constants.PageSizeConst;
 import online_learn.constants.StatusCodeConst;
 import online_learn.dtos.category_dto.CategoryListDTO;
+import online_learn.dtos.course_dto.CourseCreateUpdateDTO;
 import online_learn.dtos.course_dto.GetStudentOrTeacherCoursesDTO;
 import online_learn.dtos.user_dto.UserProfileInfoDTO;
+import online_learn.entity.Category;
 import online_learn.entity.Course;
+import online_learn.entity.User;
 import online_learn.paging.Pagination;
 import online_learn.repositories.ICategoryRepository;
 import online_learn.repositories.ICourseRepository;
+import online_learn.repositories.IUserRepository;
 import online_learn.responses.ResponseBase;
 import online_learn.services.base.BaseService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +30,13 @@ public class ManagerCourseService extends BaseService implements IManagerCourseS
 
     private final ICourseRepository courseRepository;
     private final ICategoryRepository categoryRepository;
+    private final IUserRepository userRepository;
 
-    public ManagerCourseService(ICourseRepository courseRepository, ICategoryRepository categoryRepository) {
+    public ManagerCourseService(ICourseRepository courseRepository, ICategoryRepository categoryRepository
+            , IUserRepository userRepository) {
         this.courseRepository = courseRepository;
         this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
     }
 
     private Stream<Course> getStream(int teacherId) {
@@ -74,11 +82,53 @@ public class ManagerCourseService extends BaseService implements IManagerCourseS
     public ResponseBase create() {
         Map<String, Object> data = new HashMap<>();
         try {
+            setDataCategories(data);
+            return new ResponseBase(StatusCodeConst.OK, data);
+        } catch (Exception e) {
+            data.clear();
+            data.put("error", e.getMessage() + " " + e);
+            data.put("code", StatusCodeConst.INTERNAL_SERVER_ERROR);
             setValueForHeaderFooter(data, true, true, true, true);
-            List<CategoryListDTO> categories = categoryRepository.findAll().stream().map(c -> new CategoryListDTO(c.getCategoryId(), c.getCategoryName()))
-                    .toList();
+            return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
+        }
+    }
 
-            data.put("categories", categories);
+    private void setDataCategories(Map<String, Object> data) {
+        setValueForHeaderFooter(data, true, true, true, true);
+        List<CategoryListDTO> categories = categoryRepository.findAll().stream().map(c -> new CategoryListDTO(c.getCategoryId(), c.getCategoryName()))
+                .toList();
+
+        data.put("categories", categories);
+    }
+
+    @Override
+    public ResponseBase create(CourseCreateUpdateDTO DTO, HttpSession session) {
+        Map<String, Object> data = new HashMap<>();
+        try {
+            UserProfileInfoDTO userProfileInfoDTO = (UserProfileInfoDTO) session.getAttribute("user");
+            User creator = userRepository.findById(userProfileInfoDTO.getUserId()).orElseThrow(() -> new RuntimeException("Not found user"));
+            Category category = categoryRepository.findById(DTO.getCategoryId()).orElseThrow(() -> new RuntimeException("Not found category"));
+
+            setDataCategories(data);
+
+            if (courseRepository.findAll().stream().anyMatch(c -> c.getCourseName().equalsIgnoreCase(DTO.getCourseName().trim())
+                    && c.getCategory().getCategoryId() == DTO.getCategoryId() && !c.isDeleted())) {
+                data.put("error", "Course already exists");
+                return new ResponseBase(StatusCodeConst.BAD_REQUEST, data);
+            }
+
+            Course course = new Course();
+            course.setCategory(category);
+            course.setCourseName(DTO.getCourseName().trim());
+            course.setDescription(DTO.getDescription() == null || DTO.getDescription().trim().isEmpty() ? null : DTO.getDescription().trim());
+            course.setCreator(creator);
+            course.setImage(DTO.getImage().trim());
+            course.setCreatedAt(LocalDateTime.now());
+            course.setUpdatedAt(LocalDateTime.now());
+            course.setDeleted(false);
+            courseRepository.save(course);
+
+            data.put("success", "Create successful");
             return new ResponseBase(StatusCodeConst.OK, data);
         } catch (Exception e) {
             data.clear();

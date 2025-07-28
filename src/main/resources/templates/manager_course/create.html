@@ -47,4 +47,19 @@
     </div>
 </form>
 
+<script>
+    document.getElementById('form').addEventListener('submit', function (event) {
+        const courseNameInput = document.getElementById('floatingCourseName');
+        const imageInput = document.getElementById('floatingImage');
+
+        if (courseNameInput.value.trim().length === 0) {
+            document.getElementById('error').innerHTML = 'You have to input your course name';
+            event.preventDefault();
+        } else if (imageInput.value.trim().length === 0) {
+            document.getElementById('error').innerHTML = 'You have to input image link';
+            event.preventDefault();
+        }
+    });
+</script>
+
 <section th:replace="shared/footer" xmlns:th="http://www.thymeleaf.org"></section>
