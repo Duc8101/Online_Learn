@@ -48,7 +48,7 @@ public class ManagerCourseController {
     @PostMapping("/Create")
     public ModelAndView create(CourseCreateUpdateDTO DTO, HttpSession session) {
         ResponseBase responseBase = service.create(DTO, session);
-        if (responseBase.getCode() == StatusCodeConst.OK ||  responseBase.getCode() == StatusCodeConst.BAD_REQUEST) {
+        if (responseBase.getCode() == StatusCodeConst.OK || responseBase.getCode() == StatusCodeConst.BAD_REQUEST) {
             return new ModelAndView("manager_course/create", responseBase.getData());
         }
         return new ModelAndView("shared/error", responseBase.getData());
@@ -67,6 +67,15 @@ public class ManagerCourseController {
 
         if (responseBase.getCode() == StatusCodeConst.BAD_REQUEST) {
             return new ModelAndView("redirect:/ManagerCourse");
+        }
+        return new ModelAndView("shared/error", responseBase.getData());
+    }
+
+    @PostMapping("/Update/{courseId}")
+    public ModelAndView update(@PathVariable(name = "courseId") int courseId, CourseCreateUpdateDTO DTO, HttpSession session) {
+        ResponseBase responseBase = service.update(courseId, DTO, session);
+        if (responseBase.getCode() == StatusCodeConst.OK || responseBase.getCode() == StatusCodeConst.BAD_REQUEST) {
+            return new ModelAndView("manager_course/update", responseBase.getData());
         }
         return new ModelAndView("shared/error", responseBase.getData());
     }

@@ -179,4 +179,62 @@ public class ManagerCourseService extends BaseService implements IManagerCourseS
             return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
         }
     }
+
+    @Override
+    public ResponseBase update(int courseId, CourseCreateUpdateDTO DTO, HttpSession session) {
+        Map<String, Object> data = new HashMap<>();
+        try {
+            Course course = courseRepository.findAll().stream().filter(c -> c.getCourseId() == courseId && !c.isDeleted())
+                    .findFirst().orElse(null);
+            if (course == null) {
+                data.put("error", "Course not found");
+                data.put("code", StatusCodeConst.NOT_FOUND);
+                return new ResponseBase(StatusCodeConst.NOT_FOUND, data);
+            }
+
+            setValueForHeaderFooter(data, true, true, true, true);
+            setDataCategories(data);
+
+            GetStudentOrTeacherCoursesDTO studentOrTeacherCoursesDTO = new GetStudentOrTeacherCoursesDTO();
+            studentOrTeacherCoursesDTO.setCourseId(courseId);
+            studentOrTeacherCoursesDTO.setCourseName(course.getCourseName());
+            studentOrTeacherCoursesDTO.setDescription(course.getDescription());
+            studentOrTeacherCoursesDTO.setCategoryId(course.getCategory().getCategoryId());
+            studentOrTeacherCoursesDTO.setCreatorId(course.getCreator().getUserId());
+            studentOrTeacherCoursesDTO.setImage(course.getImage());
+            studentOrTeacherCoursesDTO.setCreatorName(course.getCreator().getFullName());
+
+            data.put("course", studentOrTeacherCoursesDTO);
+
+            if (courseRepository.findAll().stream().anyMatch(c -> c.getCourseName().equalsIgnoreCase(DTO.getCourseName().trim())
+                    && c.getCategory().getCategoryId() == DTO.getCategoryId() && !c.isDeleted() && c.getCourseId() != courseId)) {
+                data.put("error", "Course already exists");
+                return new ResponseBase(StatusCodeConst.BAD_REQUEST, data);
+            }
+
+            Category category = categoryRepository.findById(DTO.getCategoryId()).orElseThrow(() -> new RuntimeException("Category not found"));
+
+            course.setCourseName(DTO.getCourseName());
+            course.setDescription(DTO.getDescription() == null || DTO.getDescription().trim().isEmpty() ? null : DTO.getDescription().trim());
+            course.setCategory(category);
+            course.setImage(DTO.getImage());
+            course.setUpdatedAt(LocalDateTime.now());
+            courseRepository.save(course);
+
+            studentOrTeacherCoursesDTO.setCourseName(DTO.getCourseName());
+            studentOrTeacherCoursesDTO.setDescription(DTO.getDescription() == null || DTO.getDescription().trim().isEmpty() ? null : DTO.getDescription().trim());
+            studentOrTeacherCoursesDTO.setCategoryId(DTO.getCategoryId());
+            studentOrTeacherCoursesDTO.setImage(DTO.getImage());
+
+            data.put("course", studentOrTeacherCoursesDTO);
+            data.put("success", "Update successful");
+            return new ResponseBase(StatusCodeConst.OK, data);
+        } catch (Exception e) {
+            data.clear();
+            data.put("error", e.getMessage() + " " + e);
+            data.put("code", StatusCodeConst.INTERNAL_SERVER_ERROR);
+            setValueForHeaderFooter(data, true, true, true, true);
+            return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
+        }
+    }
 }
