@@ -79,4 +79,21 @@ public class ManagerCourseController {
         }
         return new ModelAndView("shared/error", responseBase.getData());
     }
+
+    @GetMapping("/Delete/{courseId}")
+    public ModelAndView delete(@PathVariable(required = false, name = "courseId") String courseId, HttpSession session) {
+        if (!ParseUtil.intTryParse(courseId)) {
+            return new ModelAndView("redirect:/Home");
+        }
+
+        ResponseBase responseBase = service.delete(Integer.parseInt(courseId), session);
+        if (responseBase.getCode() == StatusCodeConst.OK) {
+            return new ModelAndView("redirect:/ManagerCourse");
+        }
+
+        if (responseBase.getCode() == StatusCodeConst.BAD_REQUEST) {
+            return new ModelAndView("redirect:/Courses");
+        }
+        return new ModelAndView("shared/error", responseBase.getData());
+    }
 }

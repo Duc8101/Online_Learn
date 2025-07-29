@@ -15,4 +15,6 @@ public interface IManagerCourseService {
     ResponseBase update(int courseId, HttpSession session);
 
     ResponseBase update(int courseId, CourseCreateUpdateDTO DTO, HttpSession session);
+
+    ResponseBase delete(int courseId, HttpSession session);
 }

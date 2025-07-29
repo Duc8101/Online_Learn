@@ -237,4 +237,33 @@ public class ManagerCourseService extends BaseService implements IManagerCourseS
             return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
         }
     }
+
+    @Override
+    public ResponseBase delete(int courseId, HttpSession session) {
+        Map<String, Object> data = new HashMap<>();
+        try {
+            Course course = courseRepository.findAll().stream().filter(c -> c.getCourseId() == courseId && !c.isDeleted())
+                    .findFirst().orElse(null);
+            if (course == null) {
+                data.put("error", "Course not found");
+                data.put("code", StatusCodeConst.NOT_FOUND);
+                return new ResponseBase(StatusCodeConst.NOT_FOUND, data);
+            }
+
+            UserProfileInfoDTO userProfileInfoDTO = (UserProfileInfoDTO) session.getAttribute("user");
+            if (course.getCreator().getUserId() != userProfileInfoDTO.getUserId()) {
+                return new ResponseBase(StatusCodeConst.BAD_REQUEST, data);
+            }
+
+            course.setDeleted(true);
+            courseRepository.save(course);
+            return new ResponseBase(StatusCodeConst.OK, data);
+        } catch (Exception e) {
+            data.clear();
+            data.put("error", e.getMessage() + " " + e);
+            data.put("code", StatusCodeConst.INTERNAL_SERVER_ERROR);
+            setValueForHeaderFooter(data, true, true, true, true);
+            return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
+        }
+    }
 }
