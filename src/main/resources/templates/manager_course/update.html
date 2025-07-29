@@ -1,0 +1,65 @@
+<section th:replace="shared/header" xmlns:th="http://www.thymeleaf.org"></section>
+
+<form th:action="${'/ManagerCourse/Update/'} + ${course.courseId}" method="POST" id="form">
+    <div class="container pt-4 px-4">
+        <div class="row">
+            <h3 class="mb-4 col-12 p-auto text-center ">Create Course</h3>
+            <p style="color:red;margin-left: 10px" id="error" th:text="${error}"></p>
+            <p style="color:green;margin-left: 10px" id="success" th:text="${success}"></p>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="bg-light rounded h-100 p-4">
+                    <div class="form-floating mb-3">
+                        <input name="courseName" type="text" class="form-control" id="floatingCourseName"
+                               placeholder="Course Name" th:value="${course.courseName}" required>
+                        <label for="floatingCourseName">Course Name</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <select name="categoryId" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                            <option th:each="category: ${categories}" th:selected="${category.categoryId == course.categoryId}" th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
+                        </select>
+                        <label for="floatingSelect">Course Category</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input name="image" type="text" class="form-control" id="floatingImage"
+                               placeholder="Image" th:value="${course.image}" required>
+                        <label for="floatingImage">Image Link</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea name="description" class="form-control" placeholder="Description"
+                                  id="floatingDescription" style="height: 150px;" th:text="${course.description}"></textarea>
+                        <label for="floatingDescription">Description</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="">
+                <button type="submit" class="btn btn-primary mt-5 col-12 py-2 text-center fs-5">Update Course</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    document.getElementById('form').addEventListener('submit', function (event) {
+        const courseNameInput = document.getElementById('floatingCourseName');
+        const imageInput = document.getElementById('floatingImage');
+
+        if (courseNameInput.value.trim().length === 0) {
+            document.getElementById('error').innerHTML = 'You have to input your course name';
+            event.preventDefault();
+        } else if (imageInput.value.trim().length === 0) {
+            document.getElementById('error').innerHTML = 'You have to input image link';
+            event.preventDefault();
+        }
+    });
+</script>
+
+<section th:replace="shared/footer" xmlns:th="http://www.thymeleaf.org"></section>

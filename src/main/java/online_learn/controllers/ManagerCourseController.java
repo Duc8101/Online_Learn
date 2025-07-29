@@ -8,6 +8,7 @@ import online_learn.services.manager_course.IManagerCourseService;
 import online_learn.utils.ParseUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,7 +24,7 @@ public class ManagerCourseController {
     }
 
     @GetMapping("")
-    public ModelAndView index(String page, HttpSession session) {
+    public ModelAndView list(String page, HttpSession session) {
         if (page != null && !ParseUtil.intTryParse(page)) {
             return new ModelAndView("redirect:/Home");
         }
@@ -49,6 +50,23 @@ public class ManagerCourseController {
         ResponseBase responseBase = service.create(DTO, session);
         if (responseBase.getCode() == StatusCodeConst.OK ||  responseBase.getCode() == StatusCodeConst.BAD_REQUEST) {
             return new ModelAndView("manager_course/create", responseBase.getData());
+        }
+        return new ModelAndView("shared/error", responseBase.getData());
+    }
+
+    @GetMapping("/Update/{courseId}")
+    public ModelAndView update(@PathVariable(required = false, name = "courseId") String courseId, HttpSession session) {
+        if (!ParseUtil.intTryParse(courseId)) {
+            return new ModelAndView("redirect:/Courses");
+        }
+
+        ResponseBase responseBase = service.update(Integer.parseInt(courseId), session);
+        if (responseBase.getCode() == StatusCodeConst.OK) {
+            return new ModelAndView("manager_course/update", responseBase.getData());
+        }
+
+        if (responseBase.getCode() == StatusCodeConst.BAD_REQUEST) {
+            return new ModelAndView("redirect:/ManagerCourse");
         }
         return new ModelAndView("shared/error", responseBase.getData());
     }

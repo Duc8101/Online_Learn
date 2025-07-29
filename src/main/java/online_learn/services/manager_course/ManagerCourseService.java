@@ -82,6 +82,7 @@ public class ManagerCourseService extends BaseService implements IManagerCourseS
     public ResponseBase create() {
         Map<String, Object> data = new HashMap<>();
         try {
+            setValueForHeaderFooter(data, true, true, true, true);
             setDataCategories(data);
             return new ResponseBase(StatusCodeConst.OK, data);
         } catch (Exception e) {
@@ -94,7 +95,6 @@ public class ManagerCourseService extends BaseService implements IManagerCourseS
     }
 
     private void setDataCategories(Map<String, Object> data) {
-        setValueForHeaderFooter(data, true, true, true, true);
         List<CategoryListDTO> categories = categoryRepository.findAll().stream().map(c -> new CategoryListDTO(c.getCategoryId(), c.getCategoryName()))
                 .toList();
 
@@ -109,6 +109,7 @@ public class ManagerCourseService extends BaseService implements IManagerCourseS
             User creator = userRepository.findById(userProfileInfoDTO.getUserId()).orElseThrow(() -> new RuntimeException("Not found user"));
             Category category = categoryRepository.findById(DTO.getCategoryId()).orElseThrow(() -> new RuntimeException("Not found category"));
 
+            setValueForHeaderFooter(data, true, true, true, true);
             setDataCategories(data);
 
             if (courseRepository.findAll().stream().anyMatch(c -> c.getCourseName().equalsIgnoreCase(DTO.getCourseName().trim())
@@ -141,6 +142,41 @@ public class ManagerCourseService extends BaseService implements IManagerCourseS
 
     @Override
     public ResponseBase update(int courseId, HttpSession session) {
-        return null;
+        Map<String, Object> data = new HashMap<>();
+        try {
+            Course course = courseRepository.findAll().stream().filter(c -> c.getCourseId() == courseId && !c.isDeleted())
+                    .findFirst().orElse(null);
+            if (course == null) {
+                data.put("error", "Course not found");
+                data.put("code", StatusCodeConst.NOT_FOUND);
+                return new ResponseBase(StatusCodeConst.NOT_FOUND, data);
+            }
+
+            UserProfileInfoDTO userProfileInfoDTO = (UserProfileInfoDTO) session.getAttribute("user");
+            if (course.getCreator().getUserId() != userProfileInfoDTO.getUserId()) {
+                return new ResponseBase(StatusCodeConst.BAD_REQUEST, data);
+            }
+
+            setValueForHeaderFooter(data, true, true, true, true);
+            setDataCategories(data);
+
+            GetStudentOrTeacherCoursesDTO dto = new GetStudentOrTeacherCoursesDTO();
+            dto.setCourseId(courseId);
+            dto.setCourseName(course.getCourseName());
+            dto.setDescription(course.getDescription());
+            dto.setCategoryId(course.getCategory().getCategoryId());
+            dto.setCreatorId(course.getCreator().getUserId());
+            dto.setImage(course.getImage());
+            dto.setCreatorName(course.getCreator().getFullName());
+
+            data.put("course", dto);
+            return new ResponseBase(StatusCodeConst.OK, data);
+        } catch (Exception e) {
+            data.clear();
+            data.put("error", e.getMessage() + " " + e);
+            data.put("code", StatusCodeConst.INTERNAL_SERVER_ERROR);
+            setValueForHeaderFooter(data, true, true, true, true);
+            return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
+        }
     }
 }
