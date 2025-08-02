@@ -5,6 +5,7 @@ import online_learn.constants.LessonConst;
 import online_learn.constants.StatusCodeConst;
 import online_learn.dtos.lesson_dto.LessonCreateDTO;
 import online_learn.dtos.lesson_dto.LessonListForCourseDetailOrViewLessonDTO;
+import online_learn.dtos.lesson_dto.LessonUpdateDTO;
 import online_learn.dtos.pdf_dto.PdfListDTO;
 import online_learn.dtos.user_dto.UserProfileInfoDTO;
 import online_learn.dtos.video_dto.VideoListDTO;
@@ -136,9 +137,52 @@ public class ManagerLessonService extends BaseService implements IManagerLessonS
             }
 
             Lesson lesson = new Lesson();
-            lesson.setLessonName(DTO.getLessonName());
+            lesson.setLessonName(DTO.getLessonName().trim());
             lesson.setCourse(course);
             lesson.setCreatedAt(LocalDateTime.now());
+            lesson.setUpdatedAt(LocalDateTime.now());
+            lessonRepository.save(lesson);
+            return new ResponseBase(StatusCodeConst.OK, data);
+        } catch (Exception e) {
+            data.clear();
+            data.put("error", e.getMessage() + " " + e);
+            data.put("code", StatusCodeConst.INTERNAL_SERVER_ERROR);
+            setValueForHeaderFooter(data, true, true, true, true);
+            return new ResponseBase(StatusCodeConst.INTERNAL_SERVER_ERROR, data);
+        }
+    }
+
+    @Override
+    public ResponseBase update(int lessonId, LessonUpdateDTO DTO) {
+        Map<String, Object> data = new HashMap<>();
+        try {
+            Lesson lesson = lessonRepository.findById(lessonId).orElse(null);
+            if (lesson == null || lesson.getCourse().isDeleted()) {
+                data.put("error", "Lesson not found or course might be deleted");
+                data.put("code", StatusCodeConst.NOT_FOUND);
+                return new ResponseBase(StatusCodeConst.NOT_FOUND, data);
+            }
+
+            setData(data, lesson.getCourse(), null, null, null, null);
+
+            setValueForHeaderFooter(data, false, true, false, false);
+            if (DTO.getLessonName().trim().isEmpty()) {
+                data.put("error", "Lesson name not empty");
+                return new ResponseBase(StatusCodeConst.BAD_REQUEST, data);
+            }
+
+            if (DTO.getLessonName().trim().length() > LessonConst.MAX_LESSON_NAME) {
+                data.put("error", String.format("Lesson name max %d characters", LessonConst.MAX_LESSON_NAME));
+                return new ResponseBase(StatusCodeConst.BAD_REQUEST, data);
+            }
+
+            if (lessonRepository.findAll().stream().anyMatch(l -> l.getLessonName().equalsIgnoreCase(DTO.getLessonName().trim())
+                    && l.getCourse().getCourseId() == lesson.getCourse().getCourseId() && l.getLessonId() != lesson.getLessonId())) {
+                data.put("error", "Lesson already exists");
+                return new ResponseBase(StatusCodeConst.BAD_REQUEST, data);
+            }
+
+            lesson.setLessonName(DTO.getLessonName().trim());
             lesson.setUpdatedAt(LocalDateTime.now());
             lessonRepository.save(lesson);
             return new ResponseBase(StatusCodeConst.OK, data);

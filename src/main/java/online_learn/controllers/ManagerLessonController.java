@@ -3,6 +3,7 @@ package online_learn.controllers;
 import jakarta.servlet.http.HttpSession;
 import online_learn.constants.StatusCodeConst;
 import online_learn.dtos.lesson_dto.LessonCreateDTO;
+import online_learn.dtos.lesson_dto.LessonUpdateDTO;
 import online_learn.responses.ResponseBase;
 import online_learn.services.manager_lesson.IManagerLessonService;
 import online_learn.utils.ParseUtil;
@@ -49,6 +50,19 @@ public class ManagerLessonController {
 
         if (responseBase.getCode() == StatusCodeConst.OK) {
             return new ModelAndView("redirect:/ManagerLesson/" + DTO.getCourseId());
+        }
+        return new ModelAndView("shared/error", responseBase.getData());
+    }
+
+    @PostMapping("/Update/{lessonId}")
+    public ModelAndView update(@PathVariable(value = "lessonId") int lessonId, LessonUpdateDTO DTO, int courseId) {
+        ResponseBase responseBase = service.update(lessonId, DTO);
+        if (responseBase.getCode() == StatusCodeConst.BAD_REQUEST) {
+            return new ModelAndView("manager_lesson/list", responseBase.getData());
+        }
+
+        if (responseBase.getCode() == StatusCodeConst.OK) {
+            return new ModelAndView("redirect:/ManagerLesson/" + courseId);
         }
         return new ModelAndView("shared/error", responseBase.getData());
     }
