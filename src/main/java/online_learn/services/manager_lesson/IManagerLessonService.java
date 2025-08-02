@@ -1,0 +1,9 @@
+package online_learn.services.manager_lesson;
+
+import jakarta.servlet.http.HttpSession;
+import online_learn.responses.ResponseBase;
+
+public interface IManagerLessonService {
+
+    ResponseBase list(int courseId, String video, String name, String pdf, Integer lessonId, HttpSession session);
+}

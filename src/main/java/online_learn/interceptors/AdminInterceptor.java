@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
-public class TeacherInterceptor implements HandlerInterceptor {
+public class AdminInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
@@ -21,8 +21,8 @@ public class TeacherInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        // if login not as teacher
-        if (user.getRoleId() != UserConst.ROLE_TEACHER) {
+        // if login not as admin
+        if (user.getRoleId() != UserConst.ROLE_ADMIN) {
             request.getRequestDispatcher(String.format("/error/%d", StatusCodeConst.FORBIDDEN)).forward(request, response);
             return false;
         }
