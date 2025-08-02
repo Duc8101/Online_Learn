@@ -3,6 +3,7 @@ package online_learn.controllers;
 import jakarta.servlet.http.HttpSession;
 import online_learn.constants.StatusCodeConst;
 import online_learn.responses.ResponseBase;
+import online_learn.services.manager_lesson.IManagerLessonService;
 import online_learn.utils.ParseUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,20 +15,41 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/ManagerLesson")
 public class ManagerLessonController {
 
-    @GetMapping({"", "/{courseId}"})
-    public ModelAndView learnCourse(@PathVariable(required = false, value = "courseId") String CourseId, String video, String name, String pdf, Integer lessonId, Integer videoId, Integer pdfId, HttpSession session) {
+    private final IManagerLessonService service;
+
+    public ManagerLessonController(IManagerLessonService service) {
+        this.service = service;
+    }
+
+    @GetMapping("/{courseId}")
+    public ModelAndView list(@PathVariable(required = false, value = "courseId") String CourseId, String video, String name, String pdf, Integer lessonId, HttpSession session) {
         if (ParseUtil.intTryParse(CourseId)) {
             int courseId = Integer.parseInt(CourseId);
-            ResponseBase responseBase = service.learnCourse(courseId, video, name, pdf, lessonId, videoId, pdfId, session);
-            if (responseBase.getCode() == StatusCodeConst.BAD_REQUEST) {
-                return new ModelAndView("redirect:/MyCourse");
+            ResponseBase responseBase = service.list(courseId, video, name, pdf, lessonId, session);
+            if (responseBase.getCode() == StatusCodeConst.NOT_FOUND) {
+                return new ModelAndView("redirect:/ManagerCourse");
             }
 
             if (responseBase.getCode() == StatusCodeConst.OK) {
-                return new ModelAndView("courses/learn_course", responseBase.getData());
+                return new ModelAndView("manager_lesson/list", responseBase.getData());
             }
             return new ModelAndView("shared/error", responseBase.getData());
         }
+        /* if (ParseUtil.intTryParse(CourseId)) {
+            int courseId = Integer.parseInt(CourseId);
+            ResponseBase responseBase = service.list(courseId, video, name, pdf, lessonId, session);
+            if (responseBase.getCode() == StatusCodeConst.NOT_FOUND) {
+                return new ModelAndView("redirect:/ManagerCourse");
+            }
+
+            if (responseBase.getCode() == StatusCodeConst.OK) {
+                return new ModelAndView("manager_lesson/list", responseBase.getData());
+            }
+            return new ModelAndView("shared/error", responseBase.getData());
+        }*/
         return new ModelAndView("redirect:/Courses");
     }
 }
+
+
+

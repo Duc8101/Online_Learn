@@ -43,7 +43,6 @@ public class ManagerLessonService extends BaseService implements IManagerLessonS
                     && !c.isDeleted() && c.getCreator().getUserId() == user.getUserId()).findFirst().orElse(null);
 
             if (course == null) {
-                setValueForHeaderFooter(data, true, true, true, true);
                 data.put("error", String.format("Course with id = %d does not exist", courseId));
                 data.put("code", StatusCodeConst.NOT_FOUND);
                 return new ResponseBase(StatusCodeConst.NOT_FOUND, data);
